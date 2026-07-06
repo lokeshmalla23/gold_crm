@@ -5,6 +5,7 @@ import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { suppliers as initial, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 export default function Suppliers() {
   const [list, setList] = useState(initial);
@@ -25,17 +26,17 @@ export default function Suppliers() {
   const columns = [
     { key: 'name', title: 'Supplier', render: (r) => (
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center font-semibold">{r.name[0]}</div>
+        <div className={`${cls.iconBox.md} ${cls.iconColor.blue}`}>{r.name[0]}</div>
         <div>
           <div className="font-medium text-gray-900">{r.name}</div>
-          <div className="text-xs text-gray-500">{r.contact}</div>
+          <div className={cls.mutedText}>{r.contact}</div>
         </div>
       </div>
     ) },
     { key: 'mobile', title: 'Contact', render: (r) => (
       <div>
         <div className="text-sm">{r.mobile}</div>
-        <div className="text-xs text-gray-500">{r.email}</div>
+        <div className={cls.mutedText}>{r.email}</div>
       </div>
     ) },
     { key: 'items', title: 'Items Supplied' },
@@ -54,18 +55,18 @@ export default function Suppliers() {
         <StatCard label="Balance Due" value={formatINR(totalDue)} icon={AlertCircle} iconBg="bg-red-100" iconColor="text-red-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+      <div className={cls.card}>
+        <div className={cls.cardHeader}>
           <h3 className="font-semibold text-gray-900">Suppliers</h3>
-          <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" />Add Supplier</button>
+          <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} flex items-center gap-2 text-sm`}><Plus className="w-4 h-4" />Add Supplier</button>
         </div>
         <DataTable columns={columns} data={list} pageSize={10} />
       </div>
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title="Add New Supplier"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Save Supplier</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Save Supplier</button>
         </>}
       >
         <div className="grid grid-cols-2 gap-4">
@@ -83,8 +84,8 @@ export default function Suppliers() {
 function F({ label, value, onChange }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
-      <input value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none" />
+      <label className={cls.fieldLabel}>{label}</label>
+      <input value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
     </div>
   );
 }

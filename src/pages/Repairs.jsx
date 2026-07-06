@@ -4,6 +4,7 @@ import { repairs as initialRepairs, customers, formatINR, formatDate } from '../
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
+import * as cls from '../styles/classes';
 
 const TECHNICIANS = [
   { id: 3, name: 'Ravi Kumar' },
@@ -21,7 +22,7 @@ function StatusBadge({ status, onClick }) {
     'Delivered': 'bg-gray-100 text-gray-600'
   };
   return (
-    <button onClick={onClick} className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${map[status] || map.Received}`}>
+    <button onClick={onClick} className={`${cls.badge} gap-1.5 py-1 ${map[status] || map.Received}`}>
       {status === 'Ready for Pickup' && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>}
       {status}
     </button>
@@ -134,25 +135,25 @@ export default function Repairs() {
         <StatCard label="Completed" value={stats.completed} icon={CheckCircle2} iconBg="bg-gray-100" iconColor="text-gray-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-3 md:items-center justify-between">
+      <div className={cls.card}>
+        <div className={`${cls.cardHeader} flex-col md:flex-row gap-3`}>
           <div className="relative flex-1 max-w-sm">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by customer or job ID..." className="pl-9 pr-3 py-2 w-full rounded-lg border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by customer or job ID..." className={cls.inputIcon} />
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={cls.inputSm}>
               <option>All</option>
               <option>Received</option>
               <option>In Progress</option>
               <option>Ready for Pickup</option>
               <option>Delivered</option>
             </select>
-            <select value={techFilter} onChange={(e) => setTechFilter(e.target.value)} className="px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <select value={techFilter} onChange={(e) => setTechFilter(e.target.value)} className={cls.inputSm}>
               <option>All</option>
               {TECHNICIANS.map((t) => <option key={t.id}>{t.name}</option>)}
             </select>
-            <button onClick={() => setShowNew(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2 shadow-sm">
+            <button onClick={() => setShowNew(true)} className={`${cls.btnPrimary} flex items-center gap-2`}>
               <Plus className="w-4 h-4" />New Job Card
             </button>
           </div>
@@ -161,7 +162,7 @@ export default function Repairs() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+              <tr className={`${cls.tableHeader} border-b border-gray-100`}>
                 <th className="text-left px-4 py-3">Job ID</th>
                 <th className="text-left px-4 py-3">Customer</th>
                 <th className="text-left px-4 py-3">Item</th>
@@ -178,17 +179,17 @@ export default function Repairs() {
               {filtered.length === 0 ? (
                 <tr><td colSpan={10} className="text-center py-8 text-gray-400">No repair jobs found</td></tr>
               ) : filtered.map((r) => (
-                <tr key={r.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
+                <tr key={r.id} className={cls.tableRow}>
                   <td className="px-4 py-3 font-medium text-gray-900">{r.id}</td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{r.customerName}</div>
-                    <div className="text-xs text-gray-500">{r.mobile}</div>
+                    <div className={cls.mutedText}>{r.mobile}</div>
                   </td>
                   <td className="px-4 py-3 max-w-xs truncate">{r.itemDesc}</td>
-                  <td className="px-4 py-3 text-gray-600">{r.category}</td>
-                  <td className="px-4 py-3 text-gray-600">{formatDate(r.receivedDate)}</td>
-                  <td className="px-4 py-3 text-gray-600">{formatDate(r.estimatedDate)}</td>
-                  <td className="px-4 py-3 text-gray-600">{r.technicianName}</td>
+                  <td className={cls.tableCell + ' text-gray-600'}>{r.category}</td>
+                  <td className={cls.tableCell + ' text-gray-600'}>{formatDate(r.receivedDate)}</td>
+                  <td className={cls.tableCell + ' text-gray-600'}>{formatDate(r.estimatedDate)}</td>
+                  <td className={cls.tableCell + ' text-gray-600'}>{r.technicianName}</td>
                   <td className="px-4 py-3 text-right font-medium">{formatINR(r.estimatedCost)}</td>
                   <td className="px-4 py-3"><StatusBadge status={r.status} onClick={() => advanceStatus(r.id)} /></td>
                   <td className="px-4 py-3">
@@ -197,7 +198,7 @@ export default function Repairs() {
                       {r.status !== 'Ready for Pickup' && r.status !== 'Delivered' && (
                         <button onClick={() => setList((l) => l.map((x) => x.id === r.id ? { ...x, status: 'Ready for Pickup' } : x))} className="p-1.5 rounded hover:bg-emerald-50 text-emerald-600" title="Mark Ready"><PackageCheck className="w-4 h-4" /></button>
                       )}
-                      <button onClick={() => setConfirmDelete(r.id)} className="p-1.5 rounded hover:bg-red-50 text-red-500" title="Delete"><Trash2 className="w-4 h-4" /></button>
+                      <button onClick={() => setConfirmDelete(r.id)} className={cls.btnDangerGhost} title="Delete"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </td>
                 </tr>
@@ -209,70 +210,70 @@ export default function Repairs() {
 
       <Modal open={showNew} onClose={() => { setShowNew(false); setErrors({}); }} title="New Job Card" size="lg"
         footer={<>
-          <button onClick={() => { setShowNew(false); setErrors({}); }} className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Create Job Card</button>
+          <button onClick={() => { setShowNew(false); setErrors({}); }} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleSubmit} className={cls.btnPrimary}>Create Job Card</button>
         </>}>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Customer *</label>
+            <label className={cls.fieldLabel}>Customer *</label>
             <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })} className={fieldClass('customerId')}>
               <option value="">Select customer...</option>
               {customers.map((c) => <option key={c.id} value={c.id}>{c.name} - {c.mobile}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
+            <label className={cls.fieldLabel}>Category</label>
             <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className={fieldClass('category')}>
               {['Rings', 'Chains', 'Bangles', 'Necklace', 'Earrings', 'Other'].map((c) => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Item Description *</label>
+            <label className={cls.fieldLabel}>Item Description *</label>
             <input value={form.itemDesc} onChange={(e) => setForm({ ...form, itemDesc: e.target.value })} className={fieldClass('itemDesc')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Weight</label>
+            <label className={cls.fieldLabel}>Weight</label>
             <input value={form.weight} onChange={(e) => setForm({ ...form, weight: e.target.value })} placeholder="e.g. 8.5g" className={fieldClass('weight')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Priority</label>
+            <label className={cls.fieldLabel}>Priority</label>
             <select value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} className={fieldClass('priority')}>
               <option>Normal</option>
               <option>Urgent</option>
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Issue Description *</label>
+            <label className={cls.fieldLabel}>Issue Description *</label>
             <textarea value={form.issue} onChange={(e) => setForm({ ...form, issue: e.target.value })} rows={3} className={fieldClass('issue')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Received Date</label>
+            <label className={cls.fieldLabel}>Received Date</label>
             <input type="date" value={form.receivedDate} onChange={(e) => setForm({ ...form, receivedDate: e.target.value })} className={fieldClass('receivedDate')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Est. Delivery Date *</label>
+            <label className={cls.fieldLabel}>Est. Delivery Date *</label>
             <input type="date" value={form.estimatedDate} onChange={(e) => setForm({ ...form, estimatedDate: e.target.value })} className={fieldClass('estimatedDate')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Assign Technician</label>
+            <label className={cls.fieldLabel}>Assign Technician</label>
             <select value={form.technicianId} onChange={(e) => setForm({ ...form, technicianId: e.target.value })} className={fieldClass('technicianId')}>
               {TECHNICIANS.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Estimated Cost (₹) *</label>
+            <label className={cls.fieldLabel}>Estimated Cost (₹) *</label>
             <input type="number" value={form.estimatedCost} onChange={(e) => setForm({ ...form, estimatedCost: e.target.value })} className={fieldClass('estimatedCost')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Advance Paid (₹)</label>
+            <label className={cls.fieldLabel}>Advance Paid (₹)</label>
             <input type="number" value={form.advancePaid} onChange={(e) => setForm({ ...form, advancePaid: e.target.value })} className={fieldClass('advancePaid')} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Job Card Barcode</label>
+            <label className={cls.fieldLabel}>Job Card Barcode</label>
             <div className="px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 text-sm font-mono">{newBarcode}</div>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Notes</label>
+            <label className={cls.fieldLabel}>Notes</label>
             <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} className={fieldClass('notes')} />
           </div>
         </div>
@@ -280,8 +281,8 @@ export default function Repairs() {
 
       <Modal open={!!viewJob} onClose={() => setViewJob(null)} title={viewJob ? `Job Card ${viewJob.id}` : ''} size="lg"
         footer={viewJob && <>
-          <button onClick={() => setViewJob(null)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Close</button>
-          <button onClick={() => { advanceStatus(viewJob.id); setViewJob(null); }} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium">Update Status</button>
+          <button onClick={() => setViewJob(null)} className={cls.btnSecondary}>Close</button>
+          <button onClick={() => { advanceStatus(viewJob.id); setViewJob(null); }} className={cls.btnPrimary}>Update Status</button>
         </>}>
         {viewJob && (
           <div className="space-y-5">
@@ -292,14 +293,14 @@ export default function Repairs() {
                   <div className="text-sm text-gray-600">{viewJob.mobile}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-gray-500">Barcode</div>
+                  <div className={cls.mutedText}>Barcode</div>
                   <div className="font-mono text-sm">{viewJob.barcode}</div>
                 </div>
               </div>
             </div>
 
             <div>
-              <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Status Timeline</div>
+              <div className={cls.sectionLabel + ' mb-2'}>Status Timeline</div>
               <div className="flex items-center gap-2">
                 {STATUS_ORDER.map((s, i) => {
                   const done = STATUS_ORDER.indexOf(viewJob.status) >= i;
@@ -327,7 +328,7 @@ export default function Repairs() {
             </div>
 
             <div className="border-t border-gray-100 pt-4">
-              <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Cost Breakdown</div>
+              <div className={cls.sectionLabel + ' mb-2'}>Cost Breakdown</div>
               <div className="grid grid-cols-2 gap-3">
                 <Info label="Estimated Cost" value={formatINR(viewJob.estimatedCost)} />
                 <Info label="Final Cost" value={viewJob.finalCost ? formatINR(viewJob.finalCost) : '-'} />
@@ -347,10 +348,10 @@ export default function Repairs() {
 
       <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Job Card" size="sm"
         footer={<>
-          <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium">Delete</button>
+          <button onClick={() => setConfirmDelete(null)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleDelete} className={cls.btnDanger}>Delete</button>
         </>}>
-        <p className="text-sm text-gray-700">Are you sure you want to delete job card <b>{confirmDelete}</b>? This action cannot be undone.</p>
+        <p className={cls.bodyText}>Are you sure you want to delete job card <b>{confirmDelete}</b>? This action cannot be undone.</p>
       </Modal>
     </div>
   );
@@ -358,8 +359,8 @@ export default function Repairs() {
 
 function Info({ label, value }) {
   return (
-    <div className="p-2.5 bg-gray-50 rounded-lg">
-      <div className="text-xs text-gray-500">{label}</div>
+    <div className={cls.panel.gray}>
+      <div className={cls.mutedText}>{label}</div>
       <div className="text-sm text-gray-900 font-medium mt-0.5">{value}</div>
     </div>
   );

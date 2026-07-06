@@ -5,6 +5,7 @@ import { StockBadge } from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { inventory as initialInventory, productMaster, GOLD_RATE, formatINR } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const CATEGORIES = ['All', 'Rings', 'Chains', 'Bangles', 'Necklace', 'Earrings', 'Coins'];
 
@@ -167,7 +168,7 @@ export default function Inventory() {
         <div className="w-10 h-10 rounded-lg flex-shrink-0" style={{ background: `linear-gradient(135deg, ${r.image}, #FBBF24)` }}></div>
         <div>
           <div className="font-medium text-gray-900">{r.name}</div>
-          <div className="text-xs text-gray-500">{r.itemCode} · {r.barcode}</div>
+          <div className={cls.mutedText}>{r.itemCode} · {r.barcode}</div>
           {r.designId && <div className="text-[10px] text-amber-600 font-medium">Design: {r.designId}</div>}
         </div>
       </div>
@@ -189,7 +190,7 @@ export default function Inventory() {
     { key: 'actions', title: 'Actions', render: (r) => (
       <div className="flex items-center gap-2">
         <button className="p-1.5 rounded hover:bg-gray-100 text-gray-500" onClick={(e) => { e.stopPropagation(); }}><Edit className="w-3.5 h-3.5" /></button>
-        <button className="p-1.5 rounded hover:bg-red-50 text-red-500" onClick={(e) => { e.stopPropagation(); handleDelete(r.id); }}><Trash2 className="w-3.5 h-3.5" /></button>
+        <button className={cls.btnDangerGhost} onClick={(e) => { e.stopPropagation(); handleDelete(r.id); }}><Trash2 className="w-3.5 h-3.5" /></button>
       </div>
     ) }
   ];
@@ -214,7 +215,7 @@ export default function Inventory() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className={cls.card}>
         <div className="p-4 border-b border-gray-100 flex flex-col lg:flex-row gap-3 lg:items-center justify-between">
           <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1 overflow-x-auto">
             {CATEGORIES.map((c) => (
@@ -226,20 +227,20 @@ export default function Inventory() {
           <div className="flex items-center gap-2 flex-wrap">
             <div className="relative">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search product, code, barcode..." className="pl-9 pr-3 py-2 w-56 rounded-lg border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm" />
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search product, code, barcode..." className={`${cls.inputIcon} w-56`} />
             </div>
             <div className="flex items-center gap-1 border border-gray-200 rounded-lg p-0.5">
               <button onClick={() => setView('table')} className={`p-1.5 rounded ${view === 'table' ? 'bg-gray-100' : ''}`}><List className="w-4 h-4" /></button>
               <button onClick={() => setView('grid')} className={`p-1.5 rounded ${view === 'grid' ? 'bg-gray-100' : ''}`}><LayoutGrid className="w-4 h-4" /></button>
             </div>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700"><Filter className="w-4 h-4" />Filter</button>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700"><ArrowUpDown className="w-4 h-4" />Sort</button>
+            <button className={cls.btnIcon}><Filter className="w-4 h-4" />Filter</button>
+            <button className={cls.btnIcon}><ArrowUpDown className="w-4 h-4" />Sort</button>
             <label className="flex items-center gap-2 text-sm text-gray-700 px-3">
               <input type="checkbox" checked={showStats} onChange={(e) => setShowStats(e.target.checked)} className="rounded border-gray-300 text-amber-600" />
               Stats
             </label>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700"><Download className="w-4 h-4" />Export</button>
-            <button onClick={() => { setForm(emptyForm()); setShowModal(true); }} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2 shadow-sm hover:shadow-md"><Plus className="w-4 h-4" />Add Product</button>
+            <button className={cls.btnIcon}><Download className="w-4 h-4" />Export</button>
+            <button onClick={() => { setForm(emptyForm()); setShowModal(true); }} className={`${cls.btnPrimary} flex items-center gap-2 text-sm`}><Plus className="w-4 h-4" />Add Product</button>
           </div>
         </div>
 
@@ -248,16 +249,16 @@ export default function Inventory() {
         ) : (
           <div className="p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((item) => (
-              <div key={item.id} className="border border-gray-200 rounded-xl p-3 hover:shadow-md transition-shadow">
+              <div key={item.id} className={`${cls.card} p-3 hover:shadow-md transition-shadow`}>
                 <div className="w-full h-32 rounded-lg mb-3" style={{ background: `linear-gradient(135deg, ${item.image}, #FBBF24)` }}></div>
-                <div className="text-xs text-gray-500">{item.itemCode}</div>
+                <div className={cls.mutedText}>{item.itemCode}</div>
                 <div className="font-medium text-gray-900 text-sm truncate">{item.name}</div>
                 {item.stoneType !== 'None' && <div className="text-xs text-purple-600 mt-0.5">{item.stoneType}</div>}
                 <div className="flex items-center justify-between mt-2">
                   <div className="text-amber-600 font-bold">{formatINR(item.sellingPrice)}</div>
                   <StockBadge status={item.stockStatus} />
                 </div>
-                <div className="mt-2 text-xs text-gray-500">{item.weight}g · {item.goldType}</div>
+                <div className={`mt-2 ${cls.mutedText}`}>{item.weight}g · {item.goldType}</div>
                 {item.designId && <div className="mt-1 text-[10px] text-amber-600 font-medium">Design: {item.designId}</div>}
               </div>
             ))}
@@ -277,14 +278,14 @@ export default function Inventory() {
       {/* ── ADD PRODUCT MODAL ── */}
       <Modal open={showModal} onClose={() => setShowModal(false)} title="Add New Inventory Item" size="lg"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Add to Inventory</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Add to Inventory</button>
         </>}
       >
         <div className="space-y-4">
 
           {/* Step 1 — Select Design from Product Master */}
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <div className={cls.panel.amber}>
             <div className="text-xs font-semibold text-amber-800 uppercase mb-2 flex items-center gap-1.5">
               <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center">1</span>
               Select Design from Product Master
@@ -317,53 +318,53 @@ export default function Inventory() {
 
           {/* Step 2 — Item Details */}
           <div>
-            <div className="text-xs font-semibold text-gray-500 uppercase mb-3 flex items-center gap-1.5">
+            <div className={`${cls.sectionLabel} mb-3 flex items-center gap-1.5`}>
               <span className="w-5 h-5 rounded-full bg-gray-400 text-white text-xs font-bold flex items-center justify-center">2</span>
               Item Details
               {form.fromDesign && <span className="ml-1 text-[10px] bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-medium flex items-center gap-1"><Lock className="w-2.5 h-2.5" />Auto-filled from design</span>}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Item Code</label>
+                <label className={cls.fieldLabel}>Item Code</label>
                 {form.fromDesign ? (
                   <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-mono font-semibold text-amber-700 flex items-center gap-1.5">
                     <Barcode className="w-3.5 h-3.5 text-gray-400" />{form.itemCode}
                     <span className="ml-auto text-[10px] text-gray-400">auto-generated</span>
                   </div>
                 ) : (
-                  <input value={form.itemCode} onChange={(e) => set('itemCode', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="e.g. GR-033" />
+                  <input value={form.itemCode} onChange={(e) => set('itemCode', e.target.value)} className={cls.input} placeholder="e.g. GR-033" />
                 )}
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Product Name *</label>
+                <label className={cls.fieldLabel}>Product Name *</label>
                 {form.fromDesign ? (
                   <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-800 flex items-center gap-1.5">
                     <Lock className="w-3 h-3 text-gray-400" />{form.name}
                   </div>
                 ) : (
-                  <input value={form.name} onChange={(e) => set('name', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="Product name" />
+                  <input value={form.name} onChange={(e) => set('name', e.target.value)} className={cls.input} placeholder="Product name" />
                 )}
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Category</label>
+                <label className={cls.fieldLabel}>Category</label>
                 {form.fromDesign ? (
                   <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-1.5">
                     <Lock className="w-3 h-3 text-gray-400" />{form.category}
                   </div>
                 ) : (
-                  <select value={form.category} onChange={(e) => set('category', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+                  <select value={form.category} onChange={(e) => set('category', e.target.value)} className={cls.input}>
                     {['Rings','Chains','Bangles','Necklace','Earrings','Coins'].map((c) => <option key={c}>{c}</option>)}
                   </select>
                 )}
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Gold Type</label>
+                <label className={cls.fieldLabel}>Gold Type</label>
                 {form.fromDesign ? (
                   <div className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-1.5">
                     <Lock className="w-3 h-3 text-gray-400" />{form.goldType}
                   </div>
                 ) : (
-                  <select value={form.goldType} onChange={(e) => set('goldType', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+                  <select value={form.goldType} onChange={(e) => set('goldType', e.target.value)} className={cls.input}>
                     {['22K','24K','18K','14K'].map((g) => <option key={g}>{g}</option>)}
                   </select>
                 )}
@@ -373,42 +374,42 @@ export default function Inventory() {
 
           {/* Step 3 — Weight & Stone (always editable) */}
           <div>
-            <div className="text-xs font-semibold text-gray-500 uppercase mb-3 flex items-center gap-1.5">
+            <div className={`${cls.sectionLabel} mb-3 flex items-center gap-1.5`}>
               <span className="w-5 h-5 rounded-full bg-gray-400 text-white text-xs font-bold flex items-center justify-center">3</span>
               Weight & Stone Details <span className="text-[10px] text-gray-400 normal-case font-normal">(enter actual physical measurements)</span>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Gross Weight (g) *</label>
-                <input type="number" step="0.001" value={form.weight} onChange={(e) => set('weight', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="0.000" />
+                <label className={cls.fieldLabel}>Gross Weight (g) *</label>
+                <input type="number" step="0.001" value={form.weight} onChange={(e) => set('weight', e.target.value)} className={cls.input} placeholder="0.000" />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Stone Type</label>
+                <label className={cls.fieldLabel}>Stone Type</label>
                 {form.fromDesign ? (
                   <div className={`px-3 py-2 border rounded-lg text-sm flex items-center gap-1.5 ${form.stoneType !== 'None' ? 'bg-purple-50 border-purple-200 text-purple-800 font-semibold' : 'bg-gray-50 border-gray-200 text-gray-600'}`}>
                     <Lock className="w-3 h-3 text-gray-400" />{form.stoneType}
                   </div>
                 ) : (
-                  <select value={form.stoneType} onChange={(e) => set('stoneType', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+                  <select value={form.stoneType} onChange={(e) => set('stoneType', e.target.value)} className={cls.input}>
                     {['None','Diamond','Ruby','Emerald','Sapphire','Pearl','Coral','CZ','Polki','Other'].map((s) => <option key={s}>{s}</option>)}
                   </select>
                 )}
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Stone Weight (g)</label>
-                <input type="number" step="0.001" value={form.stoneWeight} onChange={(e) => set('stoneWeight', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="0.000" disabled={form.stoneType === 'None'} />
+                <label className={cls.fieldLabel}>Stone Weight (g)</label>
+                <input type="number" step="0.001" value={form.stoneWeight} onChange={(e) => set('stoneWeight', e.target.value)} className={cls.input} placeholder="0.000" disabled={form.stoneType === 'None'} />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Stone Charges (₹)</label>
-                <input type="number" value={form.stoneCharges} onChange={(e) => set('stoneCharges', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="0" disabled={form.stoneType === 'None'} />
+                <label className={cls.fieldLabel}>Stone Charges (₹)</label>
+                <input type="number" value={form.stoneCharges} onChange={(e) => set('stoneCharges', e.target.value)} className={cls.input} placeholder="0" disabled={form.stoneType === 'None'} />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Qty</label>
-                <input type="number" value={form.qty} onChange={(e) => set('qty', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                <label className={cls.fieldLabel}>Qty</label>
+                <input type="number" value={form.qty} onChange={(e) => set('qty', e.target.value)} className={cls.input} />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Stock Status</label>
-                <select value={form.stockStatus} onChange={(e) => set('stockStatus', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+                <label className={cls.fieldLabel}>Stock Status</label>
+                <select value={form.stockStatus} onChange={(e) => set('stockStatus', e.target.value)} className={cls.input}>
                   {['In Stock','Out of Stock','Restock'].map((s) => <option key={s}>{s}</option>)}
                 </select>
               </div>
@@ -417,35 +418,35 @@ export default function Inventory() {
 
           {/* Step 4 — Pricing */}
           <div>
-            <div className="text-xs font-semibold text-gray-500 uppercase mb-3 flex items-center gap-1.5">
+            <div className={`${cls.sectionLabel} mb-3 flex items-center gap-1.5`}>
               <span className="w-5 h-5 rounded-full bg-gray-400 text-white text-xs font-bold flex items-center justify-center">4</span>
               Making & Pricing
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div>
-                <label className="block text-xs text-gray-600 mb-1">
+                <label className={cls.fieldLabel}>
                   Wastage %
                   {form.fromDesign && <span className="text-amber-600 ml-1">(from design)</span>}
                 </label>
-                <input type="number" step="0.1" value={form.wastage} onChange={(e) => set('wastage', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                <input type="number" step="0.1" value={form.wastage} onChange={(e) => set('wastage', e.target.value)} className={cls.input} />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">
+                <label className={cls.fieldLabel}>
                   Making Charges (₹)
                   {form.fromDesign && <span className="text-amber-600 ml-1">(from design)</span>}
                 </label>
-                <input type="number" value={form.makingCharges} onChange={(e) => set('makingCharges', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                <input type="number" value={form.makingCharges} onChange={(e) => set('makingCharges', e.target.value)} className={cls.input} />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">Purchase Price (₹)</label>
-                <input type="number" value={form.purchasePrice} onChange={(e) => set('purchasePrice', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" placeholder="Cost price" />
+                <label className={cls.fieldLabel}>Purchase Price (₹)</label>
+                <input type="number" value={form.purchasePrice} onChange={(e) => set('purchasePrice', e.target.value)} className={cls.input} placeholder="Cost price" />
               </div>
               <div>
-                <label className="block text-xs text-gray-600 mb-1">
+                <label className={cls.fieldLabel}>
                   Selling Price (₹)
                   {form.weight && <span className="text-emerald-600 ml-1">(suggested: {formatINR(suggested)})</span>}
                 </label>
-                <input type="number" value={form.sellingPrice} onChange={(e) => set('sellingPrice', e.target.value)} placeholder={String(suggested || 0)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                <input type="number" value={form.sellingPrice} onChange={(e) => set('sellingPrice', e.target.value)} placeholder={String(suggested || 0)} className={cls.input} />
               </div>
             </div>
             {form.weight > 0 && (

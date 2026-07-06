@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+/* ─── Root & Typography ─────────────────────────────────────────────────── */
+:root {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  color: #1f2937;
+  background-color: #f8fafc;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ─── Animations ────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-in {
+  animation: slideIn 0.25s ease-out;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+/* ─── Dark Mode ─────────────────────────────────────────────────────────── */
+.dark body             { background: #0f172a; color: #e2e8f0; }
+.dark .bg-white        { background: #1e293b !important; }
+.dark .bg-gray-50      { background: #0f172a !important; }
+.dark .bg-gray-100     { background: #1e293b !important; }
+.dark .border-gray-200 { border-color: #334155 !important; }
+.dark .border-gray-100 { border-color: #334155 !important; }
+.dark .text-gray-900   { color: #f1f5f9 !important; }
+.dark .text-gray-700   { color: #cbd5e1 !important; }
+.dark .text-gray-600   { color: #94a3b8 !important; }
+.dark .text-gray-500   { color: #64748b !important; }
+.dark aside            { background: #0f172a !important; }
+.dark .bg-slate-50     { background: #020617 !important; }
+
+/* ─── Component Layer ───────────────────────────────────────────────────── */
+@layer components {
+
+  /* Cards */
+  .card {
+    @apply bg-white rounded-xl border border-gray-200;
+  }
+  .card-sm {
+    @apply bg-white rounded-xl border border-gray-200 p-4;
+  }
+  .card-md {
+    @apply bg-white rounded-xl border border-gray-200 p-5;
+  }
+  .card-lg {
+    @apply bg-white rounded-xl border border-gray-200 p-6;
+  }
+  .card-header {
+    @apply flex items-center justify-between p-4 border-b border-gray-100;
+  }
+  .card-active {
+    @apply border-amber-300 shadow-sm shadow-amber-100;
+  }
+
+  /* Inputs */
+  .input {
+    @apply w-full px-3 py-2.5 rounded-lg border border-gray-200
+           focus:border-amber-400 focus:ring-2 focus:ring-amber-100
+           outline-none text-sm transition-colors;
+  }
+  .input-icon {
+    @apply w-full pl-9 pr-3 py-2.5 rounded-lg border border-gray-200
+           focus:border-amber-400 focus:ring-2 focus:ring-amber-100
+           outline-none text-sm transition-colors;
+  }
+  .input-sm {
+    @apply px-2.5 py-1.5 rounded-lg border border-gray-200
+           focus:border-amber-400 focus:ring-1 focus:ring-amber-200
+           outline-none text-sm transition-colors;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply px-4 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500
+           hover:from-amber-600 hover:to-yellow-600 text-white font-semibold
+           rounded-xl shadow-sm transition-all disabled:opacity-40
+           disabled:cursor-not-allowed;
+  }
+  .btn-primary-full {
+    @apply w-full py-3.5 bg-gradient-to-r from-amber-500 to-yellow-500
+           hover:from-amber-600 hover:to-yellow-600 text-white font-bold
+           rounded-xl shadow-md shadow-amber-200 disabled:opacity-40
+           disabled:cursor-not-allowed disabled:shadow-none transition-all
+           text-sm tracking-wide;
+  }
+  .btn-secondary {
+    @apply px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm
+           font-semibold text-gray-600 hover:bg-gray-50 hover:border-gray-300
+           transition-all;
+  }
+  .btn-danger {
+    @apply px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl
+           text-sm font-bold shadow-sm disabled:opacity-40
+           disabled:cursor-not-allowed transition-all;
+  }
+  .btn-ghost {
+    @apply p-2 rounded-xl hover:bg-gray-100 text-gray-500 hover:text-gray-700
+           transition-colors;
+  }
+  .btn-icon {
+    @apply flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-gray-200
+           hover:bg-amber-50 hover:border-amber-300 text-sm text-gray-600
+           transition-colors;
+  }
+
+  /* Labels */
+  .section-label {
+    @apply text-xs font-bold text-gray-600 uppercase tracking-wide;
+  }
+  .page-title {
+    @apply text-xl font-bold text-gray-900;
+  }
+  .field-label {
+    @apply text-xs font-semibold text-gray-700 block mb-1;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4;
+  }
+  .modal-box {
+    @apply bg-white rounded-2xl shadow-2xl w-full max-h-[90vh] overflow-y-auto
+           animate-scale-in;
+  }
+  .modal-header {
+    @apply flex items-center justify-between p-5 border-b border-gray-100;
+  }
+  .modal-body {
+    @apply p-5 space-y-4;
+  }
+
+  /* Tables */
+  .table-header {
+    @apply bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wide;
+  }
+  .table-cell {
+    @apply px-4 py-3 text-sm;
+  }
+  .table-row {
+    @apply border-b border-gray-100 last:border-0 hover:bg-amber-50/30
+           transition-colors;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .badge-green  { @apply bg-emerald-100 text-emerald-700; }
+  .badge-amber  { @apply bg-amber-100 text-amber-700; }
+  .badge-red    { @apply bg-red-100 text-red-700; }
+  .badge-gray   { @apply bg-gray-100 text-gray-600; }
+  .badge-blue   { @apply bg-blue-100 text-blue-700; }
+  .badge-purple { @apply bg-purple-100 text-purple-700; }
+
+  /* Icon containers */
+  .icon-box {
+    @apply flex items-center justify-center rounded-lg flex-shrink-0;
+  }
+  .icon-box-sm  { @apply w-8 h-8; }
+  .icon-box-md  { @apply w-10 h-10; }
+  .icon-box-lg  { @apply w-12 h-12 rounded-xl; }
+  .icon-amber   { @apply bg-amber-100 text-amber-600; }
+  .icon-emerald { @apply bg-emerald-100 text-emerald-600; }
+  .icon-red     { @apply bg-red-100 text-red-600; }
+  .icon-blue    { @apply bg-blue-100 text-blue-600; }
+  .icon-purple  { @apply bg-purple-100 text-purple-600; }
+
+  /* Avatar */
+  .avatar {
+    @apply rounded-full flex items-center justify-center font-bold
+           flex-shrink-0 select-none;
+  }
+  .avatar-sm { @apply w-8 h-8 text-xs; }
+  .avatar-md { @apply w-10 h-10 text-sm; }
+  .avatar-lg { @apply w-12 h-12 text-base; }
+
+  /* Toggle switch (used by Credit Sale, EMI, etc.) */
+  .toggle-track {
+    @apply relative w-9 h-5 rounded-full transition-colors cursor-pointer
+           flex-shrink-0;
+  }
+  .toggle-track-on  { @apply bg-amber-500; }
+  .toggle-track-off { @apply bg-gray-300; }
+  .toggle-thumb {
+    @apply absolute top-0.5 w-4 h-4 rounded-full bg-white shadow
+           transition-transform;
+  }
+  .toggle-thumb-on  { @apply translate-x-4; }
+  .toggle-thumb-off { @apply translate-x-0.5; }
+
+  /* Page layout */
+  .page-wrapper {
+    @apply flex flex-col gap-5 h-[calc(100vh-8rem)];
+  }
+  .section-divider {
+    @apply border-t border-dashed border-gray-200 pt-3 mt-3;
+  }
+
+  /* Amber highlight panel */
+  .panel-amber {
+    @apply bg-amber-50 border border-amber-200 rounded-xl p-3;
+  }
+  .panel-emerald {
+    @apply bg-emerald-50 border border-emerald-200 rounded-xl p-3;
+  }
+  .panel-red {
+    @apply bg-red-50 border border-red-200 rounded-xl p-3;
+  }
+  .panel-gray {
+    @apply bg-gray-50 border border-gray-200 rounded-xl p-3;
+  }
+}

@@ -7,6 +7,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { customers as initialCustomers, formatINR, formatDate, kycStatus, loyaltyPoints } from '../data/mockData';
 import { Users, Star, Crown, TrendingUp } from 'lucide-react';
+import * as cls from '../styles/classes';
 
 export default function Customers() {
   const navigate = useNavigate();
@@ -47,20 +48,20 @@ export default function Customers() {
         </div>
         <div>
           <div className="font-medium text-gray-900">{r.name}</div>
-          <div className="text-xs text-gray-500">ID: CUS-{String(r.id).padStart(4, '0')}</div>
+          <div className={cls.mutedText}>ID: CUS-{String(r.id).padStart(4, '0')}</div>
         </div>
       </div>
     ) },
     { key: 'mobile', title: 'Contact', render: (r) => (
       <div>
-        <div className="flex items-center gap-1.5 text-sm text-gray-700"><Phone className="w-3 h-3 text-gray-400" />{r.mobile}</div>
+        <div className={`flex items-center gap-1.5 ${cls.bodyText}`}><Phone className="w-3 h-3 text-gray-400" />{r.mobile}</div>
         <div className="flex items-center gap-1.5 text-xs text-gray-500 mt-0.5"><Mail className="w-3 h-3 text-gray-400" />{r.email}</div>
       </div>
     ) },
     { key: 'type', title: 'Type', render: (r) => <CustomerTypeBadge type={r.type} /> },
     { key: 'kyc', title: 'KYC', render: (r) => {
       const s = kycStatus[r.id] || 'Pending';
-      return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${s === 'Verified' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{s === 'Verified' ? 'Verified ✓' : 'Pending'}</span>;
+      return <span className={`${cls.badge} ${s === 'Verified' ? cls.badgeColor.green : cls.badgeColor.amber}`}>{s === 'Verified' ? 'Verified ✓' : 'Pending'}</span>;
     } },
     { key: 'loyalty', title: 'Loyalty', render: (r) => {
       const lp = loyaltyPoints[r.id];
@@ -93,7 +94,7 @@ export default function Customers() {
         <StatCard label="Regular" value={counts.Regular} icon={TrendingUp} iconBg="bg-emerald-100" iconColor="text-emerald-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className={cls.card}>
         <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-3 md:items-center justify-between">
           <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
             {['All', 'Regular', 'Premium', 'VIP'].map((t) => (
@@ -105,11 +106,11 @@ export default function Customers() {
           <div className="flex items-center gap-2">
             <div className="relative">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name, mobile, email..." className="pl-9 pr-3 py-2 w-64 rounded-lg border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm" />
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name, mobile, email..." className={`${cls.inputIcon} w-64`} />
             </div>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700"><Filter className="w-4 h-4" />Filter</button>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm text-gray-700"><Download className="w-4 h-4" />Export</button>
-            <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2 shadow-sm hover:shadow-md"><Plus className="w-4 h-4" />Add Customer</button>
+            <button className={cls.btnIcon}><Filter className="w-4 h-4" />Filter</button>
+            <button className={cls.btnIcon}><Download className="w-4 h-4" />Export</button>
+            <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} flex items-center gap-2`}><Plus className="w-4 h-4" />Add Customer</button>
           </div>
         </div>
         <DataTable columns={columns} data={filtered} onRowClick={(r) => navigate(`/customers/${r.id}`)} pageSize={10} />
@@ -120,8 +121,8 @@ export default function Customers() {
         onClose={() => setShowModal(false)}
         title="Add New Customer"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Save Customer</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Save Customer</button>
         </>}
       >
         <div className="grid grid-cols-2 gap-4">
@@ -129,8 +130,8 @@ export default function Customers() {
           <Field label="Mobile *" value={form.mobile} onChange={(v) => setForm({ ...form, mobile: v })} />
           <Field label="Email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Customer Type</label>
-            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none">
+            <label className={`${cls.fieldLabel}`}>Customer Type</label>
+            <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className={cls.input}>
               <option>Regular</option>
               <option>Premium</option>
               <option>VIP</option>
@@ -150,12 +151,12 @@ export default function Customers() {
 function Field({ label, value, onChange, type = 'text' }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
+      <label className={cls.fieldLabel}>{label}</label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none"
+        className={cls.input}
       />
     </div>
   );

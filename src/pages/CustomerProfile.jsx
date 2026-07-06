@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Phone, Mail, MapPin, Calendar, MessageCircle, Receipt, Bell, Cake, ShoppingBag, Wrench, PiggyBank, ArrowLeftRight, Package, Bookmark, Heart, MessageSquare } from 'lucide-react';
 import { customers, invoices, repairs, approvals, reservations, formatINR, formatDate, kycStatus, loyaltyPoints } from '../data/mockData';
 import { CustomerTypeBadge } from '../components/ui/Badge';
+import * as cls from '../styles/classes';
 
 const TABS = ['Personal Details', 'Purchase History', 'Payments', 'Savings Plans', 'Wishlist', 'Notes', 'Loyalty & KYC', 'Timeline'];
 
@@ -27,14 +28,14 @@ export default function CustomerProfile() {
         <ArrowLeft className="w-4 h-4" /> Back to Customers
       </button>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className={cls.cardLg}>
         <div className="flex flex-col md:flex-row md:items-center gap-6">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-300 to-yellow-500 text-white font-bold text-2xl flex items-center justify-center">
             {customer.name.split(' ').map((n) => n[0]).slice(0, 2).join('')}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h2 className="text-xl font-bold text-gray-900">{customer.name}</h2>
+              <h2 className={cls.pageTitle}>{customer.name}</h2>
               <CustomerTypeBadge type={customer.type} />
             </div>
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm text-gray-600">
@@ -58,7 +59,7 @@ export default function CustomerProfile() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className={cls.card}>
         <div className="border-b border-gray-100 px-4 overflow-x-auto">
           <div className="flex gap-1">
             {TABS.map((t) => (
@@ -104,21 +105,21 @@ export default function CustomerProfile() {
           {tab === 'Timeline' && <TimelineTab customer={customer} />}
           {tab === 'Loyalty & KYC' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Loyalty Points</div>
+              <div className={cls.cardSm}>
+                <div className={`${cls.sectionLabel} mb-2`}>Loyalty Points</div>
                 <div className="text-2xl font-bold text-amber-600">{Math.floor(customer.totalPurchases / 1000).toLocaleString('en-IN')}</div>
               </div>
-              <div className="p-4 border border-gray-200 rounded-lg">
-                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">KYC Status</div>
+              <div className={cls.cardSm}>
+                <div className={`${cls.sectionLabel} mb-2`}>KYC Status</div>
                 <div className="text-lg font-bold text-emerald-600">Verified</div>
               </div>
             </div>
           )}
           {tab === 'Notes' && (
             <div>
-              <p className="text-sm text-gray-700 whitespace-pre-wrap">{customer.notes || 'No notes yet'}</p>
-              <textarea placeholder="Add a note..." className="mt-4 w-full h-28 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none"></textarea>
-              <button className="mt-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Save Note</button>
+              <p className={`${cls.bodyText} whitespace-pre-wrap`}>{customer.notes || 'No notes yet'}</p>
+              <textarea placeholder="Add a note..." className={`mt-4 w-full h-28 ${cls.input}`}></textarea>
+              <button className={`mt-2 ${cls.btnPrimary}`}>Save Note</button>
             </div>
           )}
         </div>
@@ -130,15 +131,15 @@ export default function CustomerProfile() {
 function Stat({ label, value }) {
   return (
     <div>
-      <div className="text-xs text-gray-500">{label}</div>
+      <div className={cls.mutedText}>{label}</div>
       <div className="text-lg font-bold text-gray-900 mt-1">{value}</div>
     </div>
   );
 }
 function DetailRow({ label, value }) {
   return (
-    <div className="p-3 bg-gray-50 rounded-lg">
-      <div className="text-xs text-gray-500">{label}</div>
+    <div className={cls.panel.gray}>
+      <div className={cls.mutedText}>{label}</div>
       <div className="text-sm text-gray-900 font-medium mt-1">{value}</div>
     </div>
   );
@@ -178,14 +179,14 @@ function TimelineTab({ customer }) {
         const Icon = e.icon;
         return (
           <div key={i} className="flex gap-4">
-            <div className="text-xs text-gray-500 w-24 pt-2 flex-shrink-0">{formatDate(e.date)}</div>
+            <div className={`${cls.mutedText} w-24 pt-2 flex-shrink-0`}>{formatDate(e.date)}</div>
             <div className="relative flex-shrink-0">
               <div className={`w-10 h-10 rounded-full flex items-center justify-center ${e.color}`}><Icon className="w-5 h-5" /></div>
               {i < events.length - 1 && <div className="absolute left-1/2 top-10 w-px h-full bg-gray-200 -translate-x-1/2" />}
             </div>
             <div className="flex-1 pb-4">
               <div className="font-medium text-gray-900 text-sm">{e.title}</div>
-              <div className="text-xs text-gray-500 mt-0.5">{e.description}</div>
+              <div className={`${cls.mutedText} mt-0.5`}>{e.description}</div>
               {e.amount != null && <div className="text-sm font-semibold text-amber-600 mt-1">{formatINR(e.amount)}</div>}
             </div>
           </div>
@@ -202,13 +203,13 @@ function SimpleTable({ headers, rows }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gray-100">
-            {headers.map((h) => <th key={h} className="text-left py-2 px-3 text-xs font-semibold text-gray-600 uppercase">{h}</th>)}
+            {headers.map((h) => <th key={h} className={`text-left py-2 px-3 ${cls.tableHeader}`}>{h}</th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-b border-gray-50 last:border-0">
-              {r.map((c, j) => <td key={j} className="py-3 px-3 text-gray-700">{c}</td>)}
+              {r.map((c, j) => <td key={j} className={`py-3 px-3 ${cls.bodyText}`}>{c}</td>)}
             </tr>
           ))}
         </tbody>

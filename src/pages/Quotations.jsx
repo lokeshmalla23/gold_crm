@@ -4,6 +4,7 @@ import { quotations as initialQuotations, customers, inventory, GOLD_RATE, forma
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
+import * as cls from '../styles/classes';
 
 function StatusBadge({ status }) {
   const map = { Draft: 'gray', Sent: 'blue', Approved: 'green', Converted: 'yellow', Expired: 'red' };
@@ -215,13 +216,13 @@ export default function Quotations() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-3 md:items-center justify-between">
+      <div className={cls.card}>
+        <div className={`${cls.cardHeader} flex-col md:flex-row gap-3`}>
           <div className="relative flex-1 max-w-sm">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search quotations..." className="pl-9 pr-3 py-2 w-full rounded-lg border border-gray-200 focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search quotations..." className={cls.inputIcon} />
           </div>
-          <button onClick={() => { setShowNew(true); setForm(emptyForm); setExpandedItems({}); }} className="px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2 shadow-sm">
+          <button onClick={() => { setShowNew(true); setForm(emptyForm); setExpandedItems({}); }} className={`${cls.btnPrimary} flex items-center gap-2`}>
             <Plus className="w-4 h-4" />New Quotation
           </button>
         </div>
@@ -229,7 +230,7 @@ export default function Quotations() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+              <tr className={cls.tableHeader}>
                 <th className="text-left px-4 py-3">Quote #</th>
                 <th className="text-left px-4 py-3">Customer</th>
                 <th className="text-left px-4 py-3">Date</th>
@@ -247,22 +248,22 @@ export default function Quotations() {
               ) : filtered.map((q) => {
                 const totalGross = q.items.reduce((s, it) => s + (it.grossWeight || 0) * (it.qty || 1), 0);
                 return (
-                  <tr key={q.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
-                    <td className="px-4 py-3 font-semibold text-amber-700">{q.id}</td>
-                    <td className="px-4 py-3">
+                  <tr key={q.id} className={cls.tableRow}>
+                    <td className={`${cls.tableCell} font-semibold text-amber-700`}>{q.id}</td>
+                    <td className={cls.tableCell}>
                       <div className="font-medium text-gray-900">{q.customerName}</div>
-                      <div className="text-xs text-gray-500">{q.mobile}</div>
+                      <div className={cls.mutedText}>{q.mobile}</div>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">{formatDate(q.date)}</td>
-                    <td className="px-4 py-3 text-gray-600">{formatDate(q.validUntil)}</td>
-                    <td className="px-4 py-3 text-right">{q.items.length}</td>
-                    <td className="px-4 py-3 text-right font-medium">{totalGross.toFixed(2)}g</td>
-                    <td className="px-4 py-3 text-right font-semibold text-gray-900">{formatINR(q.total)}</td>
-                    <td className="px-4 py-3"><StatusBadge status={q.status} /></td>
-                    <td className="px-4 py-3">
+                    <td className={`${cls.tableCell} text-gray-600`}>{formatDate(q.date)}</td>
+                    <td className={`${cls.tableCell} text-gray-600`}>{formatDate(q.validUntil)}</td>
+                    <td className={`${cls.tableCell} text-right`}>{q.items.length}</td>
+                    <td className={`${cls.tableCell} text-right font-medium`}>{totalGross.toFixed(2)}g</td>
+                    <td className={`${cls.tableCell} text-right font-semibold text-gray-900`}>{formatINR(q.total)}</td>
+                    <td className={cls.tableCell}><StatusBadge status={q.status} /></td>
+                    <td className={cls.tableCell}>
                       <div className="flex items-center gap-1">
                         <button onClick={() => setViewQuote(q)} title="View" className="p-1.5 rounded hover:bg-amber-50 text-amber-600"><Eye className="w-4 h-4" /></button>
-                        <button onClick={() => setConfirmDelete(q.id)} title="Delete" className="p-1.5 rounded hover:bg-red-50 text-red-500"><Trash2 className="w-4 h-4" /></button>
+                        <button onClick={() => setConfirmDelete(q.id)} title="Delete" className={cls.btnDangerGhost}><Trash2 className="w-4 h-4" /></button>
                       </div>
                     </td>
                   </tr>
@@ -276,14 +277,14 @@ export default function Quotations() {
       {/* ── NEW QUOTATION MODAL ── */}
       <Modal open={showNew} onClose={() => { setShowNew(false); setErrors({}); }} title="New Quotation" size="xl"
         footer={<>
-          <button onClick={() => { setShowNew(false); setErrors({}); }} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold">Create Quotation</button>
+          <button onClick={() => { setShowNew(false); setErrors({}); }} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleSubmit} className={cls.btnPrimary}>Create Quotation</button>
         </>}>
         <div className="space-y-5">
           {/* Header */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Customer *</label>
+              <label className={cls.fieldLabel}>Customer *</label>
               <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })}
                 className={`w-full px-3 py-2 rounded-lg border text-sm outline-none focus:border-amber-400 ${errors.customerId ? 'border-red-400 bg-red-50' : 'border-gray-200'}`}>
                 <option value="">Select customer...</option>
@@ -292,9 +293,9 @@ export default function Quotations() {
               {errors.customerId && <p className="text-xs text-red-500 mt-1">Customer is required</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Validity (days)</label>
+              <label className={cls.fieldLabel}>Validity (days)</label>
               <input type="number" value={form.validity} onChange={(e) => setForm({ ...form, validity: Number(e.target.value) })}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:border-amber-400" />
+                className={cls.input} />
             </div>
           </div>
 
@@ -333,23 +334,23 @@ export default function Quotations() {
                         <span className="px-2 py-1.5 bg-emerald-50 border border-emerald-300 rounded-lg text-sm text-emerald-700 font-semibold w-24 text-center">{it.purity}</span>
                       ) : (
                         <select value={it.purity} onChange={(e) => updateItem(i, 'purity', e.target.value)}
-                          className="px-2 py-1.5 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400 w-24">
+                          className={`${cls.inputSm} w-24`}>
                           <option>22K</option><option>24K</option><option>18K</option><option>14K</option>
                         </select>
                       )}
                       <input type="number" value={it.qty} onChange={(e) => updateItem(i, 'qty', e.target.value)}
-                        className="w-16 px-2 py-1.5 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400 text-center" title="Qty" />
+                        className={`${cls.inputSm} w-16 text-center`} title="Qty" />
                       <span className="text-sm font-semibold text-amber-700 w-28 text-right">{formatINR(calc.itemTotal)}</span>
                       {it.fromInventory && (
                         <button onClick={() => overrideItem(i)} title="Edit / Override fetched values" className="p-1 rounded hover:bg-orange-50 text-orange-400" >
                           <Unlock className="w-4 h-4" />
                         </button>
                       )}
-                      <button onClick={() => toggleExpand(i)} className="p-1 rounded hover:bg-gray-200 text-gray-500">
+                      <button onClick={() => toggleExpand(i)} className={cls.btnGhost}>
                         {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </button>
                       {form.items.length > 1 && (
-                        <button onClick={() => removeItemRow(i)} className="p-1 rounded hover:bg-red-50 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                        <button onClick={() => removeItemRow(i)} className={cls.btnDangerGhost}><Trash2 className="w-4 h-4" /></button>
                       )}
                     </div>
 
@@ -408,7 +409,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" step="0.001" value={it.grossWeight} onChange={(e) => updateItem(i, 'grossWeight', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                                  className={cls.input} />
                               )}
                             </div>
                             <div>
@@ -419,7 +420,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" step="0.001" value={it.stoneWeight} onChange={(e) => updateItem(i, 'stoneWeight', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                                  className={cls.input} />
                               )}
                             </div>
                             <div>
@@ -451,7 +452,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <select value={it.stoneType} onChange={(e) => updateItem(i, 'stoneType', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+                                  className={cls.input}>
                                   {STONE_TYPES.map((s) => <option key={s}>{s}</option>)}
                                 </select>
                               )}
@@ -464,7 +465,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" value={it.stoneCharges} onChange={(e) => updateItem(i, 'stoneCharges', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400"
+                                  className={cls.input}
                                   placeholder="0" disabled={it.stoneType === 'None'} />
                               )}
                             </div>
@@ -491,7 +492,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" step="0.1" min="0" max="20" value={it.wastage} onChange={(e) => updateItem(i, 'wastage', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                                  className={cls.input} />
                               )}
                             </div>
                             <div>
@@ -508,7 +509,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" value={it.goldRate} onChange={(e) => updateItem(i, 'goldRate', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                                  className={cls.input} />
                               )}
                             </div>
                             <div>
@@ -519,7 +520,7 @@ export default function Quotations() {
                                 </div>
                               ) : (
                                 <input type="number" value={it.makingCharges} onChange={(e) => updateItem(i, 'makingCharges', e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+                                  className={cls.input} />
                               )}
                             </div>
                           </div>
@@ -527,7 +528,7 @@ export default function Quotations() {
 
                         {/* Per-item calculation summary */}
                         <div className="md:col-span-4">
-                          <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl p-3 grid grid-cols-2 md:grid-cols-5 gap-3 text-xs">
+                          <div className={`${cls.panel.amber} grid grid-cols-2 md:grid-cols-5 gap-3 text-xs`}>
                             <div className="text-center">
                               <div className="text-gray-500">Gold Value</div>
                               <div className="font-bold text-gray-800 text-sm mt-0.5">{formatINR(calc.goldValue)}</div>
@@ -575,11 +576,11 @@ export default function Quotations() {
           {/* Grand Total Summary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700 mb-1">Notes</label>
+              <label className={cls.fieldLabel}>Notes</label>
               <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={4}
-                className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm outline-none focus:border-amber-400 resize-none" placeholder="Special notes or terms..." />
+                className={`${cls.input} resize-none`} placeholder="Special notes or terms..." />
             </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-2 text-sm">
+            <div className={`${cls.panel.amber} space-y-2 text-sm`}>
               <div className="text-xs font-semibold text-amber-800 uppercase mb-3">Summary</div>
               <div className="flex justify-between text-gray-600">
                 <span>Total Gold Value</span>
@@ -622,11 +623,11 @@ export default function Quotations() {
       {/* ── VIEW QUOTE MODAL ── */}
       <Modal open={!!viewQuote} onClose={() => setViewQuote(null)} title={viewQuote ? `Quotation — ${viewQuote.id}` : ''} size="xl"
         footer={viewQuote && <>
-          <button onClick={() => setViewQuote(null)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Close</button>
+          <button onClick={() => setViewQuote(null)} className={cls.btnSecondary}>Close</button>
           <button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-medium flex items-center gap-1.5"><MessageCircle className="w-4 h-4" />WhatsApp</button>
           <button className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm font-medium flex items-center gap-1.5"><Printer className="w-4 h-4" />Print</button>
           {viewQuote.status !== 'Converted' && (
-            <button onClick={() => convertToInvoice(viewQuote.id)} className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-semibold flex items-center gap-1.5">
+            <button onClick={() => convertToInvoice(viewQuote.id)} className={`${cls.btnPrimary} flex items-center gap-1.5`}>
               <ArrowRight className="w-4 h-4" />Convert to Invoice
             </button>
           )}
@@ -637,7 +638,7 @@ export default function Quotations() {
             <div className="flex justify-between items-start border-b border-gray-200 pb-4">
               <div>
                 <div className="text-xl font-bold text-amber-600">Golden Palace Jewellers</div>
-                <div className="text-xs text-gray-500 mt-0.5">12 Zaveri Bazaar, Mumbai · GSTIN: 27AABCU9603R1ZM · Ph: 9876500000</div>
+                <div className={`${cls.mutedText} mt-0.5`}>12 Zaveri Bazaar, Mumbai · GSTIN: 27AABCU9603R1ZM · Ph: 9876500000</div>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-gray-900 tracking-tight">QUOTATION</div>
@@ -648,20 +649,20 @@ export default function Quotations() {
 
             {/* Customer & dates */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 rounded-xl p-3">
-                <div className="text-xs text-gray-500 uppercase mb-1">Quote For</div>
+              <div className={cls.cardSm}>
+                <div className={`${cls.mutedText} uppercase mb-1`}>Quote For</div>
                 <div className="font-semibold text-gray-900">{viewQuote.customerName}</div>
                 <div className="text-gray-600 text-xs mt-0.5">{viewQuote.mobile}</div>
               </div>
-              <div className="bg-gray-50 rounded-xl p-3 text-right">
-                <div className="text-xs text-gray-500">Quote Date: <b className="text-gray-800">{formatDate(viewQuote.date)}</b></div>
-                <div className="text-xs text-gray-500 mt-1">Valid Until: <b className="text-gray-800">{formatDate(viewQuote.validUntil)}</b></div>
+              <div className={`${cls.cardSm} text-right`}>
+                <div className={cls.mutedText}>Quote Date: <b className="text-gray-800">{formatDate(viewQuote.date)}</b></div>
+                <div className={`${cls.mutedText} mt-1`}>Valid Until: <b className="text-gray-800">{formatDate(viewQuote.validUntil)}</b></div>
               </div>
             </div>
 
             {/* Items — detailed breakdown */}
             <div className="space-y-3">
-              <div className="text-xs font-semibold text-gray-500 uppercase">Item Breakdown</div>
+              <div className={cls.sectionLabel}>Item Breakdown</div>
               {viewQuote.items.map((it, i) => {
                 const hasStone = it.stoneType && it.stoneType !== 'None';
                 const net = it.net ?? (it.grossWeight - it.stoneWeight);
@@ -675,7 +676,7 @@ export default function Quotations() {
                         <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-xs font-bold flex items-center justify-center">{i + 1}</span>
                         <span className="font-semibold text-gray-900">{it.name}</span>
                         <span className="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded font-medium">{it.purity || '22K'}</span>
-                        {it.qty > 1 && <span className="text-xs text-gray-500">× {it.qty}</span>}
+                        {it.qty > 1 && <span className={cls.mutedText}>× {it.qty}</span>}
                       </div>
                       <span className="font-bold text-amber-700">{formatINR(it.total)}</span>
                     </div>
@@ -717,7 +718,7 @@ export default function Quotations() {
             {/* Totals + Terms */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-xs font-semibold text-gray-500 uppercase mb-2">Terms & Conditions</div>
+                <div className={`${cls.sectionLabel} mb-2`}>Terms & Conditions</div>
                 <ul className="text-xs text-gray-600 space-y-1 list-disc pl-4">
                   <li>Prices valid until date mentioned above.</li>
                   <li>50% advance required to confirm order.</li>
@@ -726,12 +727,12 @@ export default function Quotations() {
                   <li>Making charges non-refundable once work starts.</li>
                 </ul>
                 {viewQuote.notes && (
-                  <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800">
+                  <div className={`mt-3 p-3 ${cls.panel.amber} text-xs text-amber-800`}>
                     <b>Note:</b> {viewQuote.notes}
                   </div>
                 )}
               </div>
-              <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+              <div className={`${cls.cardSm} space-y-2`}>
                 <div className="flex justify-between text-gray-600"><span>Subtotal</span><span className="font-medium">{formatINR(viewQuote.subtotal)}</span></div>
                 <div className="flex justify-between text-red-500"><span>Discount</span><span>− {formatINR(viewQuote.discount)}</span></div>
                 <div className="flex justify-between text-blue-600">
@@ -754,10 +755,10 @@ export default function Quotations() {
       {/* Delete confirm */}
       <Modal open={!!confirmDelete} onClose={() => setConfirmDelete(null)} title="Delete Quotation" size="sm"
         footer={<>
-          <button onClick={() => setConfirmDelete(null)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-medium">Delete</button>
+          <button onClick={() => setConfirmDelete(null)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleDelete} className={cls.btnDanger}>Delete</button>
         </>}>
-        <p className="text-sm text-gray-700">Are you sure you want to delete quotation <b>{confirmDelete}</b>? This cannot be undone.</p>
+        <p className={cls.bodyText}>Are you sure you want to delete quotation <b>{confirmDelete}</b>? This cannot be undone.</p>
       </Modal>
     </div>
   );

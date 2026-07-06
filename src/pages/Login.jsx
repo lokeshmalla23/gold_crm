@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import * as cls from '../styles/classes';
 
 export default function Login() {
   const [email, setEmail] = useState('demo@goldcrm.com');
@@ -28,11 +29,11 @@ export default function Login() {
               GC
             </div>
             <h1 className="text-2xl font-bold text-gray-900">Gold CRM</h1>
-            <p className="text-sm text-gray-500 mt-1">Sign in to your jewellery business</p>
+            <p className={`${cls.mutedText} mt-1`}>Sign in to your jewellery business</p>
           </div>
 
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">{error}</div>
+            <div className={`mb-4 p-3 ${cls.panel.red} text-red-700 text-sm`}>{error}</div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -44,7 +45,7 @@ export default function Login() {
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm"
+                  className={cls.inputIcon}
                   placeholder="you@example.com"
                 />
               </div>
@@ -57,7 +58,7 @@ export default function Login() {
                   type={showPass ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-lg focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none text-sm"
+                  className={`${cls.inputIcon} pr-10`}
                   placeholder="••••••••"
                 />
                 <button
@@ -78,18 +79,18 @@ export default function Login() {
             </div>
             <button
               type="submit"
-              className="w-full py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all"
+              className={cls.btnPrimaryFull}
             >
               Sign In
             </button>
           </form>
 
           <div className="mt-6 pt-6 border-t border-gray-100 text-center">
-            <p className="text-xs text-gray-500">Demo credentials pre-filled</p>
+            <p className={cls.mutedText}>Demo credentials pre-filled</p>
             <p className="text-xs text-gray-400 mt-1">demo@goldcrm.com / password</p>
           </div>
         </div>
-        <p className="text-center text-xs text-gray-500 mt-4">© 2026 Gold CRM. All rights reserved.</p>
+        <p className={`text-center ${cls.mutedText} mt-4`}>© 2026 Gold CRM. All rights reserved.</p>
       </div>
     </div>
   );

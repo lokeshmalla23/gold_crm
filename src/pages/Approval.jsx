@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Search, Plus, ClipboardCheck, IndianRupee, AlertTriangle, CheckCircle2, X, Eye, MessageCircle, Printer, CalendarClock } from 'lucide-react';
 import { approvals as initialApprovals, customers, inventory, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const STATUS_COLORS = {
   Active: 'bg-blue-100 text-blue-700',
@@ -41,8 +42,8 @@ export default function Approval() {
       )}
 
       <div>
-        <h2 className="text-xl font-bold text-gray-900">Approval / Home Trial</h2>
-        <p className="text-sm text-gray-500">Track jewellery given to customers for home approval</p>
+        <h2 className={cls.pageTitle}>Approval / Home Trial</h2>
+        <p className={cls.mutedText}>Track jewellery given to customers for home approval</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -52,42 +53,42 @@ export default function Approval() {
         <StatCard label="Converted to Sales" value={stats.converted} icon={CheckCircle2} color="bg-emerald-50 text-emerald-700" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+      <div className={`${cls.cardSm} flex flex-wrap items-center gap-3`}>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search slip # or customer..." className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search slip # or customer..." className={cls.inputIcon} />
         </div>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={cls.inputSm}>
           <option>All</option><option>Active</option><option>Overdue</option><option>Returned</option><option>Converted</option><option>Partially Returned</option>
         </select>
-        <button onClick={() => setShowNew(true)} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
+        <button onClick={() => setShowNew(true)} className={`${cls.btnPrimary} flex items-center gap-2`}>
           <Plus className="w-4 h-4" />New Approval
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className={`${cls.card} overflow-hidden`}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+            <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}>
               <Th>Slip #</Th><Th>Customer</Th><Th>Items</Th><Th>Total Value</Th><Th>Deposit</Th><Th>Issue Date</Th><Th>Due Date</Th><Th>Status</Th><Th>Actions</Th>
             </tr></thead>
             <tbody>
               {filtered.map((a) => (
-                <tr key={a.id} className={`border-b border-gray-50 last:border-0 ${a.status === 'Overdue' ? 'bg-red-50/40' : ''}`}>
+                <tr key={a.id} className={`${cls.tableRow} ${a.status === 'Overdue' ? 'bg-red-50/40' : ''}`}>
                   <Td className="font-mono text-xs font-semibold">{a.id}</Td>
-                  <Td><div className="font-medium">{a.customerName}</div><div className="text-xs text-gray-500">{a.mobile}</div></Td>
+                  <Td><div className="font-medium">{a.customerName}</div><div className={cls.mutedText}>{a.mobile}</div></Td>
                   <Td>{a.items.length} item(s)</Td>
                   <Td className="font-semibold">{formatINR(a.totalValue)}</Td>
                   <Td>{formatINR(a.deposit)}</Td>
                   <Td>{formatDate(a.issueDate)}</Td>
                   <Td>{formatDate(a.dueDate)}</Td>
                   <Td>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[a.status]}`}>
+                    <span className={`${cls.badge} ${STATUS_COLORS[a.status]}`}>
                       {a.status === 'Overdue' && <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse" />}
                       {a.status}
                     </span>
                   </Td>
-                  <Td><button onClick={() => setViewing(a)} className="p-1.5 rounded hover:bg-gray-100"><Eye className="w-4 h-4 text-gray-600" /></button></Td>
+                  <Td><button onClick={() => setViewing(a)} className={cls.btnGhost}><Eye className="w-4 h-4 text-gray-600" /></button></Td>
                 </tr>
               ))}
             </tbody>
@@ -108,10 +109,10 @@ export default function Approval() {
 
 function StatCard({ label, value, icon: Icon, color }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className={cls.cardSm}>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-xs text-gray-500 font-medium">{label}</div>
+          <div className={cls.mutedText}>{label}</div>
           <div className="text-lg font-bold text-gray-900 mt-1">{value}</div>
         </div>
         <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}><Icon className="w-5 h-5" /></div>
@@ -121,23 +122,23 @@ function StatCard({ label, value, icon: Icon, color }) {
 }
 
 const Th = ({ children }) => <th className="text-left px-4 py-3 font-semibold">{children}</th>;
-const Td = ({ children, className = '' }) => <td className={`px-4 py-3 text-gray-700 ${className}`}>{children}</td>;
+const Td = ({ children, className = '' }) => <td className={`${cls.tableCell} text-gray-700 ${className}`}>{children}</td>;
 
 function Modal({ title, onClose, children, wide }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+    <div className={cls.modalOverlay}>
       <div className={`bg-white rounded-xl shadow-xl w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
-        <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white">
+        <div className={`${cls.modalHeader} sticky top-0 bg-white`}>
           <h3 className="font-semibold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-100"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className={cls.btnGhost}><X className="w-5 h-5" /></button>
         </div>
-        <div className="p-5">{children}</div>
+        <div className={cls.modalBody}>{children}</div>
       </div>
     </div>
   );
 }
 
-function Field({ label, children }) { return <div><label className="text-xs font-semibold text-gray-600 uppercase block mb-1">{label}</label>{children}</div>; }
+function Field({ label, children }) { return <div><label className={`${cls.sectionLabel} block mb-1`}>{label}</label>{children}</div>; }
 
 function NewApprovalModal({ onClose, onSave }) {
   const [customerId, setCustomerId] = useState(customers[0].id);
@@ -170,18 +171,18 @@ function NewApprovalModal({ onClose, onSave }) {
     <Modal title="New Approval Slip" onClose={onClose} wide>
       <div className="space-y-3">
         <Field label="Customer">
-          <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={cls.input}>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.name} · {c.mobile}</option>)}
           </select>
         </Field>
 
         <Field label="Add Items">
-          <input value={itemSearch} onChange={(e) => setItemSearch(e.target.value)} placeholder="Search items..." className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+          <input value={itemSearch} onChange={(e) => setItemSearch(e.target.value)} placeholder="Search items..." className={cls.input} />
           {itemSearch && (
             <div className="mt-2 grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
               {filteredItems.map((i) => (
                 <button key={i.id} onClick={() => { setSelectedIds(selectedIds.includes(i.id) ? selectedIds.filter((x) => x !== i.id) : [...selectedIds, i.id]); }} className={`text-left p-2 border rounded-lg ${selectedIds.includes(i.id) ? 'border-amber-500 bg-amber-50' : 'border-gray-200'}`}>
-                  <div className="text-xs text-gray-500">{i.itemCode}</div>
+                  <div className={cls.mutedText}>{i.itemCode}</div>
                   <div className="text-sm font-medium">{i.name}</div>
                   <div className="text-xs text-amber-600 font-semibold">{formatINR(i.sellingPrice)}</div>
                 </button>
@@ -195,7 +196,7 @@ function NewApprovalModal({ onClose, onSave }) {
             <div className="text-xs font-semibold text-gray-600 mb-2">Selected Items ({selectedItems.length})</div>
             {selectedItems.map((i) => (
               <div key={i.id} className="flex justify-between items-center py-1 text-sm">
-                <span>{i.name} <span className="text-xs text-gray-500">({i.itemCode})</span></span>
+                <span>{i.name} <span className={cls.mutedText}>({i.itemCode})</span></span>
                 <div className="flex items-center gap-2">
                   <span className="font-semibold">{formatINR(i.sellingPrice)}</span>
                   <button onClick={() => setSelectedIds(selectedIds.filter((x) => x !== i.id))} className="text-red-500"><X className="w-3.5 h-3.5" /></button>
@@ -209,15 +210,15 @@ function NewApprovalModal({ onClose, onSave }) {
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Deposit"><input type="number" value={deposit} onChange={(e) => setDeposit(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-          <Field label="Due Date"><input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+          <Field label="Deposit"><input type="number" value={deposit} onChange={(e) => setDeposit(e.target.value)} className={cls.input} /></Field>
+          <Field label="Due Date"><input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className={cls.input} /></Field>
         </div>
-        <Field label="Staff"><input value={staffName} onChange={(e) => setStaffName(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="Staff"><input value={staffName} onChange={(e) => setStaffName(e.target.value)} className={cls.input} /></Field>
+        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className={cls.input} /></Field>
 
         <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={save} disabled={selectedIds.length === 0} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium disabled:opacity-40">Create Approval</button>
+          <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={save} disabled={selectedIds.length === 0} className={cls.btnPrimary}>Create Approval</button>
         </div>
       </div>
     </Modal>
@@ -229,31 +230,31 @@ function ApprovalDetailModal({ approval, onClose, onAction }) {
     <Modal title={`Approval Slip · ${approval.id}`} onClose={onClose} wide>
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
-          <div><div className="text-xs text-gray-500">Customer</div><div className="font-medium">{approval.customerName}</div><div className="text-xs text-gray-500">{approval.mobile}</div></div>
-          <div><div className="text-xs text-gray-500">Status</div><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[approval.status]}`}>{approval.status}</span></div>
-          <div><div className="text-xs text-gray-500">Issue Date</div><div>{formatDate(approval.issueDate)}</div></div>
-          <div><div className="text-xs text-gray-500">Due Date</div><div>{formatDate(approval.dueDate)}</div></div>
-          <div><div className="text-xs text-gray-500">Deposit</div><div className="font-semibold">{formatINR(approval.deposit)}</div></div>
-          <div><div className="text-xs text-gray-500">Staff</div><div>{approval.staffName}</div></div>
+          <div><div className={cls.mutedText}>Customer</div><div className="font-medium">{approval.customerName}</div><div className={cls.mutedText}>{approval.mobile}</div></div>
+          <div><div className={cls.mutedText}>Status</div><span className={`${cls.badge} ${STATUS_COLORS[approval.status]}`}>{approval.status}</span></div>
+          <div><div className={cls.mutedText}>Issue Date</div><div>{formatDate(approval.issueDate)}</div></div>
+          <div><div className={cls.mutedText}>Due Date</div><div>{formatDate(approval.dueDate)}</div></div>
+          <div><div className={cls.mutedText}>Deposit</div><div className="font-semibold">{formatINR(approval.deposit)}</div></div>
+          <div><div className={cls.mutedText}>Staff</div><div>{approval.staffName}</div></div>
         </div>
 
         <table className="w-full text-sm border border-gray-100 rounded overflow-hidden">
-          <thead className="bg-gray-50 text-xs uppercase text-gray-600"><tr><Th>Item</Th><Th>Code</Th><Th>Weight</Th><Th>Value</Th></tr></thead>
+          <thead className={`${cls.tableHeader} text-xs uppercase text-gray-600`}><tr><Th>Item</Th><Th>Code</Th><Th>Weight</Th><Th>Value</Th></tr></thead>
           <tbody>
             {approval.items.map((it, i) => (
-              <tr key={i} className="border-t border-gray-100"><Td>{it.name}</Td><Td className="font-mono text-xs">{it.itemCode}</Td><Td>{it.weight}g</Td><Td className="font-semibold">{formatINR(it.value)}</Td></tr>
+              <tr key={i} className={cls.tableRow}><Td>{it.name}</Td><Td className="font-mono text-xs">{it.itemCode}</Td><Td>{it.weight}g</Td><Td className="font-semibold">{formatINR(it.value)}</Td></tr>
             ))}
             <tr className="bg-amber-50 border-t border-gray-100"><Td colSpan="3" className="font-semibold text-right">Total</Td><Td className="font-bold text-amber-600">{formatINR(approval.totalValue)}</Td></tr>
           </tbody>
         </table>
 
-        {approval.notes && <div className="text-xs text-gray-600"><b>Notes:</b> {approval.notes}</div>}
+        {approval.notes && <div className={cls.mutedText}><b>Notes:</b> {approval.notes}</div>}
 
         <div className="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
           <button onClick={() => onAction('return')} className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm font-medium">Mark All Returned</button>
           <button onClick={() => onAction('convert')} className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium">Convert to Invoice</button>
           <button onClick={() => onAction('extend')} className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium flex items-center gap-1"><CalendarClock className="w-4 h-4" />Extend Due Date</button>
-          <button className="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium flex items-center gap-1"><Printer className="w-4 h-4" />Print Slip</button>
+          <button className={`${cls.btnSecondary} flex items-center gap-1`}><Printer className="w-4 h-4" />Print Slip</button>
           <button className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-sm font-medium flex items-center gap-1"><MessageCircle className="w-4 h-4" />WhatsApp</button>
         </div>
       </div>

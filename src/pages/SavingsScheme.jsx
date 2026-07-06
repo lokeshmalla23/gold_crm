@@ -5,6 +5,7 @@ import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { savingsSchemes as initial, customers, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 export default function SavingsScheme() {
   const [list, setList] = useState(initial);
@@ -60,39 +61,39 @@ export default function SavingsScheme() {
         <StatCard label="Maturing" value={maturityMonth} icon={Award} iconBg="bg-amber-100" iconColor="text-amber-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+      <div className={cls.card}>
+        <div className={cls.cardHeader}>
           <h3 className="font-semibold text-gray-900">Savings Schemes</h3>
-          <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" />New Scheme</button>
+          <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} flex items-center gap-2 text-sm`}><Plus className="w-4 h-4" />New Scheme</button>
         </div>
         <DataTable columns={columns} data={list} pageSize={10} />
       </div>
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title="Create Savings Scheme"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Create Scheme</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Create Scheme</button>
         </>}
       >
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Customer *</label>
-            <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <label className={cls.fieldLabel}>Customer *</label>
+            <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })} className={cls.input}>
               <option value="">Select customer</option>
               {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
           </div>
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Plan Name</label>
-            <input value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+            <label className={cls.fieldLabel}>Plan Name</label>
+            <input value={form.plan} onChange={(e) => setForm({ ...form, plan: e.target.value })} className={cls.input} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Monthly Amount</label>
-            <input type="number" value={form.planAmount} onChange={(e) => setForm({ ...form, planAmount: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+            <label className={cls.fieldLabel}>Monthly Amount</label>
+            <input type="number" value={form.planAmount} onChange={(e) => setForm({ ...form, planAmount: e.target.value })} className={cls.input} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Duration (months)</label>
-            <input type="number" value={form.duration} onChange={(e) => setForm({ ...form, duration: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+            <label className={cls.fieldLabel}>Duration (months)</label>
+            <input type="number" value={form.duration} onChange={(e) => setForm({ ...form, duration: e.target.value })} className={cls.input} />
           </div>
         </div>
       </Modal>

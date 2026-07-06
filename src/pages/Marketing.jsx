@@ -3,6 +3,7 @@ import { Plus, MessageCircle, Gift, Cake, Heart, TrendingUp, Users, Send } from 
 import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import { campaigns, customers, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const TABS = [
   { key: 'whatsapp', label: 'WhatsApp', icon: MessageCircle },
@@ -45,7 +46,7 @@ export default function Marketing() {
 
   return (
     <div className="space-y-5">
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className={cls.card}>
         <div className="border-b border-gray-100 px-4 overflow-x-auto">
           <div className="flex gap-1">
             {TABS.map((t) => {
@@ -62,23 +63,23 @@ export default function Marketing() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold text-gray-900">{TABS.find((t) => t.key === tab)?.label} Campaigns</h3>
-              <p className="text-xs text-gray-500">Manage messages and outreach</p>
+              <p className={cls.mutedText}>Manage messages and outreach</p>
             </div>
-            <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" />Create Campaign</button>
+            <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} flex items-center gap-2 text-sm`}><Plus className="w-4 h-4" />Create Campaign</button>
           </div>
 
           {tab === 'birthday' ? (
             <div>
               <h4 className="text-sm font-semibold text-gray-700 mb-3">Upcoming Birthdays (next 30 days)</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {upcomingBirthdays.length === 0 ? <p className="text-sm text-gray-500">No upcoming birthdays</p> :
+                {upcomingBirthdays.length === 0 ? <p className={cls.bodyText}>No upcoming birthdays</p> :
                   upcomingBirthdays.map((c) => (
-                    <div key={c.id} className="p-4 border border-gray-200 rounded-lg">
+                    <div key={c.id} className={cls.cardSm}>
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-300 to-pink-500 text-white font-semibold flex items-center justify-center">{c.name[0]}</div>
                         <div>
                           <div className="font-medium text-gray-900">{c.name}</div>
-                          <div className="text-xs text-gray-500">{c.mobile}</div>
+                          <div className={cls.mutedText}>{c.mobile}</div>
                         </div>
                       </div>
                       <div className="flex items-center justify-between text-xs">
@@ -94,14 +95,14 @@ export default function Marketing() {
             <div>
               <h4 className="text-sm font-semibold text-gray-700 mb-3">Upcoming Anniversaries (next 30 days)</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {upcomingAnniversaries.length === 0 ? <p className="text-sm text-gray-500">No upcoming anniversaries</p> :
+                {upcomingAnniversaries.length === 0 ? <p className={cls.bodyText}>No upcoming anniversaries</p> :
                   upcomingAnniversaries.map((c) => (
-                    <div key={c.id} className="p-4 border border-gray-200 rounded-lg">
+                    <div key={c.id} className={cls.cardSm}>
                       <div className="flex items-center gap-3 mb-2">
                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-300 to-red-500 text-white font-semibold flex items-center justify-center">{c.name[0]}</div>
                         <div>
                           <div className="font-medium text-gray-900">{c.name}</div>
-                          <div className="text-xs text-gray-500">{c.mobile}</div>
+                          <div className={cls.mutedText}>{c.mobile}</div>
                         </div>
                       </div>
                       <div className="flex items-center justify-between text-xs">
@@ -122,7 +123,7 @@ export default function Marketing() {
                   <div key={c.id} className="p-4 border border-gray-200 rounded-lg hover:border-amber-200 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="font-medium text-gray-900">{c.name}</div>
-                      <div className="text-xs text-gray-500 mt-0.5">{c.date} · Audience: {c.audience} {c.sent && `· Sent: ${c.sent}`} {c.opened && `· Opened: ${c.opened}`} {c.discount && `· ${c.discount}`}</div>
+                      <div className={`${cls.mutedText} mt-0.5`}>{c.date} · Audience: {c.audience} {c.sent && `· Sent: ${c.sent}`} {c.opened && `· Opened: ${c.opened}`} {c.discount && `· ${c.discount}`}</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge variant={c.status === 'Running' || c.status === 'Active' ? 'green' : c.status === 'Scheduled' || c.status === 'Recurring' ? 'blue' : c.status === 'Completed' ? 'gray' : 'yellow'}>{c.status}</Badge>
@@ -138,18 +139,18 @@ export default function Marketing() {
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title="Create Campaign"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Send Campaign</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnPrimary}>Send Campaign</button>
         </>}
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Campaign Name</label>
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" />
+            <label className={cls.fieldLabel}>Campaign Name</label>
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={cls.input} />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Audience</label>
-            <select value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <label className={cls.fieldLabel}>Audience</label>
+            <select value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value })} className={cls.input}>
               <option>All Customers</option>
               <option>VIP Only</option>
               <option>Premium & VIP</option>
@@ -157,8 +158,8 @@ export default function Marketing() {
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Message</label>
-            <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={4} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm" placeholder="Wishing you a sparkling day! Visit us for exclusive offers." />
+            <label className={cls.fieldLabel}>Message</label>
+            <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={4} className={cls.input} placeholder="Wishing you a sparkling day! Visit us for exclusive offers." />
           </div>
         </div>
       </Modal>

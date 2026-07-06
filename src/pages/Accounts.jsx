@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { BookOpen, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { dayBook, customers, invoices, formatINR, formatDate } from '../data/mockData';
 import Badge from '../components/ui/Badge';
+import * as cls from '../styles/classes';
 
 const TABS = ['Day Book', 'Cash Book', 'Customer Ledger'];
 
@@ -66,7 +67,7 @@ export default function Accounts() {
 
   return (
     <div className="space-y-5">
-      <div className="bg-white rounded-xl border border-gray-200">
+      <div className={cls.card}>
         <div className="border-b border-gray-100 px-4 flex gap-1">
           {TABS.map((t) => (
             <button key={t} onClick={() => setTab(t)} className={`px-4 py-3 text-sm font-medium border-b-2 ${tab === t ? 'border-amber-500 text-amber-600' : 'border-transparent text-gray-500 hover:text-gray-900'}`}>{t}</button>
@@ -77,20 +78,20 @@ export default function Accounts() {
           <div>
             <div className="p-4 flex flex-col md:flex-row gap-3 md:items-center justify-between border-b border-gray-100">
               <div className="flex gap-2 flex-wrap items-center">
-                <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} className="px-3 py-2 rounded-lg border border-gray-200 text-sm">
+                <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} className={cls.inputSm}>
                   <option>All</option><option>Today</option><option>This Week</option><option>This Month</option><option>Custom</option>
                 </select>
                 {dateFilter === 'Custom' && (
                   <>
-                    <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="px-2 py-2 rounded-lg border border-gray-200 text-sm" />
+                    <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={cls.inputSm} />
                     <span className="text-gray-400">to</span>
-                    <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="px-2 py-2 rounded-lg border border-gray-200 text-sm" />
+                    <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={cls.inputSm} />
                   </>
                 )}
               </div>
               <div className="relative">
                 <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search transactions..." className="pl-9 pr-3 py-2 w-64 rounded-lg border border-gray-200 text-sm" />
+                <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search transactions..." className={`${cls.inputIcon} w-64`} />
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4 p-4 border-b border-gray-100 bg-gradient-to-r from-amber-50 to-yellow-50">
@@ -101,7 +102,7 @@ export default function Accounts() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+                  <tr className={`${cls.tableHeader} border-b border-gray-100`}>
                     <th className="text-left px-4 py-3">Date</th>
                     <th className="text-left px-4 py-3">Ref No</th>
                     <th className="text-left px-4 py-3">Description</th>
@@ -114,15 +115,15 @@ export default function Accounts() {
                 </thead>
                 <tbody>
                   {filteredDayBook.map((d) => (
-                    <tr key={d.id} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
-                      <td className="px-4 py-3 text-gray-600">{formatDate(d.date)}</td>
-                      <td className="px-4 py-3 font-medium">{d.refNo}</td>
-                      <td className="px-4 py-3">{d.description}</td>
-                      <td className="px-4 py-3"><TypeBadge type={d.type} /></td>
-                      <td className="px-4 py-3 text-right text-red-600">{d.debit > 0 ? formatINR(d.debit) : '-'}</td>
-                      <td className="px-4 py-3 text-right text-emerald-600">{d.credit > 0 ? formatINR(d.credit) : '-'}</td>
-                      <td className="px-4 py-3 text-right font-medium">{formatINR(d.balance)}</td>
-                      <td className="px-4 py-3 text-gray-600 text-xs">{d.paymentMode}</td>
+                    <tr key={d.id} className={cls.tableRow}>
+                      <td className={`${cls.tableCell} text-gray-600`}>{formatDate(d.date)}</td>
+                      <td className={`${cls.tableCell} font-medium`}>{d.refNo}</td>
+                      <td className={cls.tableCell}>{d.description}</td>
+                      <td className={cls.tableCell}><TypeBadge type={d.type} /></td>
+                      <td className={`${cls.tableCell} text-right text-red-600`}>{d.debit > 0 ? formatINR(d.debit) : '-'}</td>
+                      <td className={`${cls.tableCell} text-right text-emerald-600`}>{d.credit > 0 ? formatINR(d.credit) : '-'}</td>
+                      <td className={`${cls.tableCell} text-right font-medium`}>{formatINR(d.balance)}</td>
+                      <td className={`${cls.tableCell} text-gray-600 text-xs`}>{d.paymentMode}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -152,7 +153,7 @@ export default function Accounts() {
                     <div className="border-t border-gray-100 bg-gray-50">
                       <table className="w-full text-sm">
                         <thead>
-                          <tr className="text-xs uppercase text-gray-600">
+                          <tr className={cls.tableHeader}>
                             <th className="text-left px-4 py-2">Ref</th>
                             <th className="text-left px-4 py-2">Description</th>
                             <th className="text-right px-4 py-2">Debit</th>
@@ -184,7 +185,7 @@ export default function Accounts() {
           <div className="p-4">
             <div className="flex items-center gap-4 mb-4">
               <label className="text-sm font-medium">Select Customer:</label>
-              <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className="px-3 py-2 rounded-lg border border-gray-200 text-sm">
+              <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={cls.inputSm}>
                 {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
@@ -193,23 +194,23 @@ export default function Accounts() {
               <>
                 <div className="grid grid-cols-3 gap-4 mb-4 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg">
                   <div>
-                    <div className="text-xs text-gray-500 uppercase">Customer</div>
+                    <div className={`${cls.mutedText} uppercase`}>Customer</div>
                     <div className="font-bold text-gray-900">{customerLedger.customer.name}</div>
-                    <div className="text-xs text-gray-600">{customerLedger.customer.mobile}</div>
+                    <div className={cls.mutedText}>{customerLedger.customer.mobile}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 uppercase">Total Purchases</div>
+                    <div className={`${cls.mutedText} uppercase`}>Total Purchases</div>
                     <div className="text-xl font-bold text-emerald-600">{formatINR(customerLedger.customer.totalPurchases)}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 uppercase">Outstanding Balance</div>
+                    <div className={`${cls.mutedText} uppercase`}>Outstanding Balance</div>
                     <div className={`text-xl font-bold ${customerLedger.outstanding > 0 ? 'text-red-600' : 'text-emerald-600'}`}>{formatINR(customerLedger.outstanding)}</div>
                   </div>
                 </div>
 
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+                    <tr className={`${cls.tableHeader} border-b border-gray-100`}>
                       <th className="text-left px-4 py-3">Date</th>
                       <th className="text-left px-4 py-3">Ref</th>
                       <th className="text-left px-4 py-3">Description</th>
@@ -222,13 +223,13 @@ export default function Accounts() {
                     {customerLedger.entries.length === 0 ? (
                       <tr><td colSpan={6} className="text-center py-8 text-gray-400">No transactions</td></tr>
                     ) : customerLedger.entries.map((e, i) => (
-                      <tr key={i} className="border-b border-gray-50 last:border-0">
-                        <td className="px-4 py-3 text-gray-600">{formatDate(e.date)}</td>
-                        <td className="px-4 py-3 font-medium">{e.ref}</td>
-                        <td className="px-4 py-3">{e.desc}</td>
-                        <td className="px-4 py-3 text-right text-red-600">{formatINR(e.debit)}</td>
-                        <td className="px-4 py-3 text-right text-emerald-600">{formatINR(e.credit)}</td>
-                        <td className="px-4 py-3 text-right font-semibold">{formatINR(e.balance)}</td>
+                      <tr key={i} className={cls.tableRow}>
+                        <td className={`${cls.tableCell} text-gray-600`}>{formatDate(e.date)}</td>
+                        <td className={`${cls.tableCell} font-medium`}>{e.ref}</td>
+                        <td className={cls.tableCell}>{e.desc}</td>
+                        <td className={`${cls.tableCell} text-right text-red-600`}>{formatINR(e.debit)}</td>
+                        <td className={`${cls.tableCell} text-right text-emerald-600`}>{formatINR(e.credit)}</td>
+                        <td className={`${cls.tableCell} text-right font-semibold`}>{formatINR(e.balance)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -244,8 +245,8 @@ export default function Accounts() {
 
 function SumCard({ label, value, color }) {
   return (
-    <div className="bg-white rounded-lg p-3 border border-gray-200">
-      <div className="text-xs text-gray-500">{label}</div>
+    <div className={cls.cardSm}>
+      <div className={cls.mutedText}>{label}</div>
       <div className={`text-lg font-bold mt-1 ${color}`}>{value}</div>
     </div>
   );

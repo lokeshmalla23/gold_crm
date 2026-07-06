@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
 import { monthlySales, categorySales, topSellingItems, invoices, formatINR, formatDate, inventory, customers } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -20,11 +21,11 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-5">
+        <div className={`lg:col-span-2 ${cls.cardMd}`}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold text-gray-900">Monthly Sales</h3>
-              <p className="text-xs text-gray-500">Sales performance over the year</p>
+              <p className={cls.mutedText}>Sales performance over the year</p>
             </div>
             <select className="text-sm border border-gray-200 rounded-lg px-3 py-1.5">
               <option>This Year</option>
@@ -42,9 +43,9 @@ export default function Dashboard() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className={cls.cardMd}>
           <h3 className="font-semibold text-gray-900 mb-1">Gold Categories</h3>
-          <p className="text-xs text-gray-500 mb-4">Sales share by category</p>
+          <p className={`${cls.mutedText} mb-4`}>Sales share by category</p>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={categorySales} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={90} paddingAngle={2}>
@@ -65,35 +66,35 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className={cls.cardMd}>
         <h3 className="font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button onClick={() => navigate('/customers')} className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center"><UserPlus className="w-5 h-5" /></div>
+          <button onClick={() => navigate('/customers')} className={`flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all`}>
+            <div className={`${cls.iconBox.md} ${cls.iconColor.amber}`}><UserPlus className="w-5 h-5" /></div>
             <div className="text-left">
               <div className="font-medium text-gray-900 text-sm">Add Customer</div>
-              <div className="text-xs text-gray-500">Register new customer</div>
+              <div className={cls.mutedText}>Register new customer</div>
             </div>
           </button>
-          <button onClick={() => navigate('/billing')} className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center"><Receipt className="w-5 h-5" /></div>
+          <button onClick={() => navigate('/billing')} className={`flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all`}>
+            <div className={`${cls.iconBox.md} ${cls.iconColor.emerald}`}><Receipt className="w-5 h-5" /></div>
             <div className="text-left">
               <div className="font-medium text-gray-900 text-sm">Create Bill</div>
-              <div className="text-xs text-gray-500">Generate new invoice</div>
+              <div className={cls.mutedText}>Generate new invoice</div>
             </div>
           </button>
-          <button onClick={() => navigate('/inventory')} className="flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all">
-            <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><Plus className="w-5 h-5" /></div>
+          <button onClick={() => navigate('/inventory')} className={`flex items-center gap-3 p-4 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-all`}>
+            <div className={`${cls.iconBox.md} ${cls.iconColor.blue}`}><Plus className="w-5 h-5" /></div>
             <div className="text-left">
               <div className="font-medium text-gray-900 text-sm">Add Jewellery</div>
-              <div className="text-xs text-gray-500">New inventory item</div>
+              <div className={cls.mutedText}>New inventory item</div>
             </div>
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className={cls.cardMd}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900">Top Selling Items</h3>
             <Badge variant="gold">This Month</Badge>
@@ -104,7 +105,7 @@ export default function Dashboard() {
                 <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-amber-200 to-amber-400 flex items-center justify-center text-xs font-bold text-amber-900">#{i + 1}</div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-gray-900 truncate">{item.name}</div>
-                  <div className="text-xs text-gray-500">{item.category} · {item.sold} sold</div>
+                  <div className={cls.mutedText}>{item.category} · {item.sold} sold</div>
                 </div>
                 <div className="text-sm font-semibold text-gray-900">{formatINR(item.revenue)}</div>
               </div>
@@ -112,7 +113,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className={cls.cardMd}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-gray-900">Recent Transactions</h3>
             <button onClick={() => navigate('/billing')} className="text-xs text-amber-600 font-medium hover:text-amber-700">View all</button>
@@ -125,11 +126,11 @@ export default function Dashboard() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-gray-900 truncate">{inv.customerName}</div>
-                  <div className="text-xs text-gray-500">{inv.id} · {formatDate(inv.date)}</div>
+                  <div className={cls.mutedText}>{inv.id} · {formatDate(inv.date)}</div>
                 </div>
                 <div className="text-right">
                   <div className="text-sm font-semibold text-gray-900">{formatINR(inv.totalAmount)}</div>
-                  <div className="text-xs text-gray-500">{inv.paymentMode}</div>
+                  <div className={cls.mutedText}>{inv.paymentMode}</div>
                 </div>
               </div>
             ))}
