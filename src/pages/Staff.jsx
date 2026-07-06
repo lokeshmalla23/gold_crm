@@ -142,12 +142,12 @@ export default function Staff() {
   );
 }
 
-function F({ label, value, onChange, type = 'text' }) {
+function F({ label, value, onChange, type = 'text', allowDecimal = false }) {
   return (
     <div>
       <label className={cls.fieldLabel}>{label}</label>
       {type === 'number' ? (
-        <NumberInput value={value} onChange={onChange} className={cls.input} />
+        <NumberInput allowDecimal={allowDecimal} value={value} onChange={onChange} className={cls.input} />
       ) : (
         <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
       )}

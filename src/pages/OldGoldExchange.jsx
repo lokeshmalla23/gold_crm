@@ -90,7 +90,7 @@ export default function OldGoldExchange() {
               {customers.map((c) => <option key={c.id} value={c.id}>{c.name} — {c.mobile}</option>)}
             </select>
           </div>
-          <F label="Weight (g) *" type="number" value={form.weight} onChange={(v) => setForm({ ...form, weight: v })} />
+          <F label="Weight (g) *" type="number" allowDecimal value={form.weight} onChange={(v) => setForm({ ...form, weight: v })} />
           <div>
             <label className={cls.fieldLabel}>Purity</label>
             <select value={form.purity} onChange={(e) => setForm({ ...form, purity: e.target.value })} className={cls.input}>
@@ -99,7 +99,7 @@ export default function OldGoldExchange() {
           </div>
           <F label="Gold Rate (₹/g)" type="number" value={form.goldRate} onChange={(v) => setForm({ ...form, goldRate: v })} />
           <F label="Testing Charges" type="number" value={form.testingCharges} onChange={(v) => setForm({ ...form, testingCharges: v })} />
-          <F label="Deduction %" type="number" value={form.deductionPercent} onChange={(v) => setForm({ ...form, deductionPercent: v })} />
+          <F label="Deduction %" type="number" allowDecimal value={form.deductionPercent} onChange={(v) => setForm({ ...form, deductionPercent: v })} />
         </div>
         <div className={`mt-4 ${cls.panel.amber}`}>
           <div className="text-xs text-amber-800">Calculated Exchange Value</div>
@@ -141,12 +141,12 @@ export default function OldGoldExchange() {
   );
 }
 
-function F({ label, value, onChange, type = 'text' }) {
+function F({ label, value, onChange, type = 'text', allowDecimal = false }) {
   return (
     <div>
       <label className={cls.fieldLabel}>{label}</label>
       {type === 'number' ? (
-        <NumberInput value={value} onChange={onChange} className={cls.input} />
+        <NumberInput allowDecimal={allowDecimal} value={value} onChange={onChange} className={cls.input} />
       ) : (
         <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
       )}

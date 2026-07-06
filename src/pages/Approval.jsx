@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, ClipboardCheck, IndianRupee, AlertTriangle, CheckCircle2, X, Eye, MessageCircle, Printer, CalendarClock } from 'lucide-react';
 import { approvals as initialApprovals, customers, inventory, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const STATUS_COLORS = {
   Active: 'bg-blue-100 text-blue-700',
@@ -210,7 +211,7 @@ function NewApprovalModal({ onClose, onSave }) {
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Deposit"><input type="number" value={deposit} onChange={(e) => setDeposit(e.target.value)} className={cls.input} /></Field>
+          <Field label="Deposit"><NumberInput value={deposit} onChange={setDeposit} className={cls.input} /></Field>
           <Field label="Due Date"><input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className={cls.input} /></Field>
         </div>
         <Field label="Staff"><input value={staffName} onChange={(e) => setStaffName(e.target.value)} className={cls.input} /></Field>

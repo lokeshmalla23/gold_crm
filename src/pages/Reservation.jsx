@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, Bookmark, IndianRupee, CalendarClock, AlertTriangle, X, Eye, Printer, CheckCircle2 } from 'lucide-react';
 import { reservations as initialReservations, customers, inventory, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const STATUS_BADGE = {
   Active: cls.badgeColor.blue,
@@ -176,7 +177,7 @@ function NewReservationModal({ onClose, onSave }) {
           <div className="flex justify-between"><span>Balance:</span><span className="font-semibold text-red-600">{formatINR(balance)}</span></div>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Advance Amount"><input type="number" value={advancePaid} onChange={(e) => setAdvance(e.target.value)} className={cls.input} /></Field>
+          <Field label="Advance Amount"><NumberInput value={advancePaid} onChange={setAdvance} className={cls.input} /></Field>
           <Field label="Expiry Date"><input type="date" value={expiryDate} onChange={(e) => setExpiry(e.target.value)} className={cls.input} /></Field>
         </div>
         <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className={cls.input} /></Field>

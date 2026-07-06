@@ -6,6 +6,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { savingsSchemes as initial, customers, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 export default function SavingsScheme() {
   const [list, setList] = useState(initial);
@@ -89,11 +90,11 @@ export default function SavingsScheme() {
           </div>
           <div>
             <label className={cls.fieldLabel}>Monthly Amount</label>
-            <input type="number" value={form.planAmount} onChange={(e) => setForm({ ...form, planAmount: e.target.value })} className={cls.input} />
+            <NumberInput value={form.planAmount} onChange={(v) => setForm({ ...form, planAmount: v })} className={cls.input} />
           </div>
           <div>
             <label className={cls.fieldLabel}>Duration (months)</label>
-            <input type="number" value={form.duration} onChange={(e) => setForm({ ...form, duration: e.target.value })} className={cls.input} />
+            <NumberInput value={form.duration} onChange={(v) => setForm({ ...form, duration: v })} className={cls.input} />
           </div>
         </div>
       </Modal>

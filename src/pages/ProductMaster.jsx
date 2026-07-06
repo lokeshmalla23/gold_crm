@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, Grid3x3, List, X, Edit3, BookMarked, CheckCircle2, Package } from 'lucide-react';
 import { productMaster as initialProducts, inventory, formatINR } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const CATEGORIES = ['All', 'Rings', 'Chains', 'Bangles', 'Necklace', 'Earrings', 'Coins'];
 const STYLES = ['All', 'Contemporary', 'Traditional', 'Antique', 'Classic', 'Religious', 'Bridal', 'Plain', 'Cute'];
@@ -225,10 +226,10 @@ function EditModal({ product, onClose, onSave }) {
             </Field>
           </div>
           <div className="grid grid-cols-4 gap-3">
-            <Field label="Min Wt"><input type="number" value={form.minWeight} onChange={(e) => set('minWeight', Number(e.target.value))} className={cls.input} /></Field>
-            <Field label="Max Wt"><input type="number" value={form.maxWeight} onChange={(e) => set('maxWeight', Number(e.target.value))} className={cls.input} /></Field>
-            <Field label="Making/g"><input type="number" value={form.makingChargeDefault} onChange={(e) => set('makingChargeDefault', Number(e.target.value))} className={cls.input} /></Field>
-            <Field label="Wastage %"><input type="number" value={form.wastageDefault} onChange={(e) => set('wastageDefault', Number(e.target.value))} className={cls.input} /></Field>
+            <Field label="Min Wt"><NumberInput allowDecimal value={form.minWeight} onChange={(v) => set('minWeight', Number(v))} className={cls.input} /></Field>
+            <Field label="Max Wt"><NumberInput allowDecimal value={form.maxWeight} onChange={(v) => set('maxWeight', Number(v))} className={cls.input} /></Field>
+            <Field label="Making/g"><NumberInput value={form.makingChargeDefault} onChange={(v) => set('makingChargeDefault', Number(v))} className={cls.input} /></Field>
+            <Field label="Wastage %"><NumberInput allowDecimal value={form.wastageDefault} onChange={(v) => set('wastageDefault', Number(v))} className={cls.input} /></Field>
           </div>
           <Field label="Stone Type"><input value={form.stoneType} onChange={(e) => set('stoneType', e.target.value)} className={cls.input} /></Field>
           <Field label="Description"><textarea value={form.description} onChange={(e) => set('description', e.target.value)} rows="2" className={cls.input} /></Field>

@@ -3,6 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { TrendingUp, TrendingDown, Bell, RefreshCw, Check, Plus, Trash2 } from 'lucide-react';
 import { goldRateHistory, shopSettings, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 export default function GoldRate() {
   const latest = goldRateHistory[goldRateHistory.length - 1];
@@ -89,7 +90,7 @@ export default function GoldRate() {
           <div className="space-y-3">
             <div>
               <label className={cls.fieldLabel}>22K Gold Rate (₹/gram) *</label>
-              <input type="number" value={rate22K} onChange={(e) => setRate22K(Number(e.target.value) || 0)} className={`mt-1 ${cls.input}`} />
+              <NumberInput value={rate22K} onChange={(v) => setRate22K(Number(v) || 0)} className={`mt-1 ${cls.input}`} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -145,7 +146,7 @@ export default function GoldRate() {
           <select value={newAlert.purity} onChange={(e) => setNewAlert({ ...newAlert, purity: e.target.value })} className={cls.inputSm}>
             <option>22K</option><option>24K</option><option>18K</option>
           </select>
-          <input type="number" placeholder="Target rate ₹" value={newAlert.target} onChange={(e) => setNewAlert({ ...newAlert, target: e.target.value })} className={cls.inputSm} />
+          <NumberInput placeholder="Target rate ₹" value={newAlert.target} onChange={(v) => setNewAlert({ ...newAlert, target: v })} className={cls.inputSm} />
           <button onClick={addAlert} className={`${cls.btnPrimary} text-sm flex items-center gap-1.5`}><Plus className="w-4 h-4" />Add Alert</button>
         </div>
         <table className="w-full text-sm">

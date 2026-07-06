@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, Factory, Weight, TrendingDown, X, CheckCircle2, Eye, Edit3 } from 'lucide-react';
 import { karigars as initialKarigars, karigarOrders as initialOrders, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const STATUS_COLORS = {
   Issued: 'bg-blue-100 text-blue-700',
@@ -241,8 +242,8 @@ function NewOrderModal({ karigars, onClose, onSave }) {
         </div>
         <Field label="Description"><input value={description} onChange={(e) => setDescription(e.target.value)} className={cls.input} /></Field>
         <div className="grid grid-cols-3 gap-3">
-          <Field label="Gold Issued (g)"><input type="number" value={goldIssued} onChange={(e) => setGoldIssued(e.target.value)} className={cls.input} /></Field>
-          <Field label="Expected Finish (g)"><input type="number" value={expectedFinishedWeight} onChange={(e) => setExpected(e.target.value)} className={cls.input} /></Field>
+          <Field label="Gold Issued (g)"><NumberInput allowDecimal value={goldIssued} onChange={setGoldIssued} className={cls.input} /></Field>
+          <Field label="Expected Finish (g)"><NumberInput allowDecimal value={expectedFinishedWeight} onChange={setExpected} className={cls.input} /></Field>
           <Field label="Purity">
             <select value={purity} onChange={(e) => setPurity(e.target.value)} className={cls.input}>
               <option>22K</option><option>18K</option><option>24K</option>
@@ -250,8 +251,8 @@ function NewOrderModal({ karigars, onClose, onSave }) {
           </Field>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Labour Rate/g"><input type="number" value={labourPerGram} onChange={(e) => setLabour(e.target.value)} className={cls.input} /></Field>
-          <Field label="Advance Paid"><input type="number" value={advancePaid} onChange={(e) => setAdvance(e.target.value)} className={cls.input} /></Field>
+          <Field label="Labour Rate/g"><NumberInput value={labourPerGram} onChange={setLabour} className={cls.input} /></Field>
+          <Field label="Advance Paid"><NumberInput value={advancePaid} onChange={setAdvance} className={cls.input} /></Field>
         </div>
         <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className={cls.input} /></Field>
         <div className="flex gap-2 justify-end">
@@ -276,7 +277,7 @@ function ReceiveModal({ order, onClose, onSave }) {
           <div className="flex justify-between"><span>Expected:</span><span className="font-semibold">{order.expectedFinishedWeight}g</span></div>
           <div className="flex justify-between"><span>Labour Rate:</span><span className="font-semibold">{formatINR(order.labourPerGram)}/g</span></div>
         </div>
-        <Field label="Returned Weight (g)"><input type="number" step="0.01" value={returnedWeight} onChange={(e) => setReturnedWeight(Number(e.target.value))} className={cls.input} /></Field>
+        <Field label="Returned Weight (g)"><NumberInput allowDecimal value={returnedWeight} onChange={(v) => setReturnedWeight(Number(v))} className={cls.input} /></Field>
         <div className={cls.panel.gray + ' text-sm space-y-1'}>
           <div className="flex justify-between"><span>Wastage:</span><span className={wastagePct > 3 ? 'font-semibold text-red-600' : 'font-semibold text-emerald-600'}>{wastage}g ({wastagePct}%)</span></div>
           <div className="flex justify-between"><span>Total Labour:</span><span className="font-semibold text-amber-600">{formatINR(totalLabour)}</span></div>
@@ -303,7 +304,7 @@ function AddKarigarModal({ onClose, onSave }) {
         <Field label="Mobile"><input value={mobile} onChange={(e) => setMobile(e.target.value)} className={cls.input} /></Field>
         <Field label="Specialty"><input value={specialty} onChange={(e) => setSpecialty(e.target.value)} className={cls.input} /></Field>
         <Field label="Address"><input value={address} onChange={(e) => setAddress(e.target.value)} className={cls.input} /></Field>
-        <Field label="Rate per gram"><input type="number" value={ratePerGram} onChange={(e) => setRate(Number(e.target.value))} className={cls.input} /></Field>
+        <Field label="Rate per gram"><NumberInput value={ratePerGram} onChange={(v) => setRate(Number(v))} className={cls.input} /></Field>
         <div className="flex gap-2 justify-end">
           <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
           <button onClick={() => onSave({ id: Date.now(), name, mobile, specialty, address, ratePerGram, balance: 0, status: 'Active', joinDate: '2026-07-06', totalWork: 0 })} className={cls.btnPrimary}>Add Karigar</button>

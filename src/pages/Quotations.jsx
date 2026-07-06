@@ -5,6 +5,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 function StatusBadge({ status }) {
   const map = { Draft: 'gray', Sent: 'blue', Approved: 'green', Converted: 'yellow', Expired: 'red' };
@@ -294,7 +295,7 @@ export default function Quotations() {
             </div>
             <div>
               <label className={cls.fieldLabel}>Validity (days)</label>
-              <input type="number" value={form.validity} onChange={(e) => setForm({ ...form, validity: Number(e.target.value) })}
+              <NumberInput value={form.validity} onChange={(v) => setForm({ ...form, validity: Number(v) })}
                 className={cls.input} />
             </div>
           </div>
@@ -338,7 +339,7 @@ export default function Quotations() {
                           <option>22K</option><option>24K</option><option>18K</option><option>14K</option>
                         </select>
                       )}
-                      <input type="number" value={it.qty} onChange={(e) => updateItem(i, 'qty', e.target.value)}
+                      <NumberInput value={it.qty} onChange={(v) => updateItem(i, 'qty', v)}
                         className={`${cls.inputSm} w-16 text-center`} title="Qty" />
                       <span className="text-sm font-semibold text-amber-700 w-28 text-right">{formatINR(calc.itemTotal)}</span>
                       {it.fromInventory && (
@@ -408,7 +409,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />{it.grossWeight} g
                                 </div>
                               ) : (
-                                <input type="number" step="0.001" value={it.grossWeight} onChange={(e) => updateItem(i, 'grossWeight', e.target.value)}
+                                <NumberInput allowDecimal value={it.grossWeight} onChange={(v) => updateItem(i, 'grossWeight', v)}
                                   className={cls.input} />
                               )}
                             </div>
@@ -419,7 +420,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />{it.stoneWeight} g
                                 </div>
                               ) : (
-                                <input type="number" step="0.001" value={it.stoneWeight} onChange={(e) => updateItem(i, 'stoneWeight', e.target.value)}
+                                <NumberInput allowDecimal value={it.stoneWeight} onChange={(v) => updateItem(i, 'stoneWeight', v)}
                                   className={cls.input} />
                               )}
                             </div>
@@ -464,7 +465,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />{formatINR(it.stoneCharges || 0)}
                                 </div>
                               ) : (
-                                <input type="number" value={it.stoneCharges} onChange={(e) => updateItem(i, 'stoneCharges', e.target.value)}
+                                <NumberInput value={it.stoneCharges} onChange={(v) => updateItem(i, 'stoneCharges', v)}
                                   className={cls.input}
                                   placeholder="0" disabled={it.stoneType === 'None'} />
                               )}
@@ -491,7 +492,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />{it.wastage}%
                                 </div>
                               ) : (
-                                <input type="number" step="0.1" min="0" max="20" value={it.wastage} onChange={(e) => updateItem(i, 'wastage', e.target.value)}
+                                <NumberInput allowDecimal value={it.wastage} onChange={(v) => updateItem(i, 'wastage', v)}
                                   className={cls.input} />
                               )}
                             </div>
@@ -508,7 +509,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />₹{(it.goldRate || 0).toLocaleString('en-IN')}
                                 </div>
                               ) : (
-                                <input type="number" value={it.goldRate} onChange={(e) => updateItem(i, 'goldRate', e.target.value)}
+                                <NumberInput value={it.goldRate} onChange={(v) => updateItem(i, 'goldRate', v)}
                                   className={cls.input} />
                               )}
                             </div>
@@ -519,7 +520,7 @@ export default function Quotations() {
                                   <Lock className="w-3 h-3 text-gray-400" />{formatINR(it.makingCharges || 0)}
                                 </div>
                               ) : (
-                                <input type="number" value={it.makingCharges} onChange={(e) => updateItem(i, 'makingCharges', e.target.value)}
+                                <NumberInput value={it.makingCharges} onChange={(v) => updateItem(i, 'makingCharges', v)}
                                   className={cls.input} />
                               )}
                             </div>
@@ -604,7 +605,7 @@ export default function Quotations() {
               </div>
               <div className="flex justify-between items-center text-red-600">
                 <span>Discount (₹)</span>
-                <input type="number" value={form.discount} onChange={(e) => setForm({ ...form, discount: Number(e.target.value) || 0 })}
+                <NumberInput value={form.discount} onChange={(v) => setForm({ ...form, discount: Number(v) || 0 })}
                   className="w-24 px-2 py-1 border border-gray-200 rounded text-right text-sm text-gray-800 outline-none focus:border-amber-400" />
               </div>
               <div className="flex justify-between text-blue-700">

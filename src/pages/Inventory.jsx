@@ -6,6 +6,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { inventory as initialInventory, productMaster, GOLD_RATE, formatINR } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const CATEGORIES = ['All', 'Rings', 'Chains', 'Bangles', 'Necklace', 'Earrings', 'Coins'];
 
@@ -381,7 +382,7 @@ export default function Inventory() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div>
                 <label className={cls.fieldLabel}>Gross Weight (g) *</label>
-                <input type="number" step="0.001" value={form.weight} onChange={(e) => set('weight', e.target.value)} className={cls.input} placeholder="0.000" />
+                <NumberInput allowDecimal value={form.weight} onChange={(v) => set('weight', v)} className={cls.input} placeholder="0.000" />
               </div>
               <div>
                 <label className={cls.fieldLabel}>Stone Type</label>
@@ -397,15 +398,15 @@ export default function Inventory() {
               </div>
               <div>
                 <label className={cls.fieldLabel}>Stone Weight (g)</label>
-                <input type="number" step="0.001" value={form.stoneWeight} onChange={(e) => set('stoneWeight', e.target.value)} className={cls.input} placeholder="0.000" disabled={form.stoneType === 'None'} />
+                <NumberInput allowDecimal value={form.stoneWeight} onChange={(v) => set('stoneWeight', v)} className={cls.input} placeholder="0.000" disabled={form.stoneType === 'None'} />
               </div>
               <div>
                 <label className={cls.fieldLabel}>Stone Charges (₹)</label>
-                <input type="number" value={form.stoneCharges} onChange={(e) => set('stoneCharges', e.target.value)} className={cls.input} placeholder="0" disabled={form.stoneType === 'None'} />
+                <NumberInput value={form.stoneCharges} onChange={(v) => set('stoneCharges', v)} className={cls.input} placeholder="0" disabled={form.stoneType === 'None'} />
               </div>
               <div>
                 <label className={cls.fieldLabel}>Qty</label>
-                <input type="number" value={form.qty} onChange={(e) => set('qty', e.target.value)} className={cls.input} />
+                <NumberInput value={form.qty} onChange={(v) => set('qty', v)} className={cls.input} />
               </div>
               <div>
                 <label className={cls.fieldLabel}>Stock Status</label>
@@ -428,25 +429,25 @@ export default function Inventory() {
                   Wastage %
                   {form.fromDesign && <span className="text-amber-600 ml-1">(from design)</span>}
                 </label>
-                <input type="number" step="0.1" value={form.wastage} onChange={(e) => set('wastage', e.target.value)} className={cls.input} />
+                <NumberInput allowDecimal value={form.wastage} onChange={(v) => set('wastage', v)} className={cls.input} />
               </div>
               <div>
                 <label className={cls.fieldLabel}>
                   Making Charges (₹)
                   {form.fromDesign && <span className="text-amber-600 ml-1">(from design)</span>}
                 </label>
-                <input type="number" value={form.makingCharges} onChange={(e) => set('makingCharges', e.target.value)} className={cls.input} />
+                <NumberInput value={form.makingCharges} onChange={(v) => set('makingCharges', v)} className={cls.input} />
               </div>
               <div>
                 <label className={cls.fieldLabel}>Purchase Price (₹)</label>
-                <input type="number" value={form.purchasePrice} onChange={(e) => set('purchasePrice', e.target.value)} className={cls.input} placeholder="Cost price" />
+                <NumberInput value={form.purchasePrice} onChange={(v) => set('purchasePrice', v)} className={cls.input} placeholder="Cost price" />
               </div>
               <div>
                 <label className={cls.fieldLabel}>
                   Selling Price (₹)
                   {form.weight && <span className="text-emerald-600 ml-1">(suggested: {formatINR(suggested)})</span>}
                 </label>
-                <input type="number" value={form.sellingPrice} onChange={(e) => set('sellingPrice', e.target.value)} placeholder={String(suggested || 0)} className={cls.input} />
+                <NumberInput value={form.sellingPrice} onChange={(v) => set('sellingPrice', v)} placeholder={String(suggested || 0)} className={cls.input} />
               </div>
             </div>
             {form.weight > 0 && (

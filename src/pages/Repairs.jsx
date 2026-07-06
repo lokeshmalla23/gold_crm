@@ -5,6 +5,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import Badge from '../components/ui/Badge';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const TECHNICIANS = [
   { id: 3, name: 'Ravi Kumar' },
@@ -262,11 +263,11 @@ export default function Repairs() {
           </div>
           <div>
             <label className={cls.fieldLabel}>Estimated Cost (₹) *</label>
-            <input type="number" value={form.estimatedCost} onChange={(e) => setForm({ ...form, estimatedCost: e.target.value })} className={fieldClass('estimatedCost')} />
+            <NumberInput value={form.estimatedCost} onChange={(v) => setForm({ ...form, estimatedCost: v })} className={fieldClass('estimatedCost')} />
           </div>
           <div>
             <label className={cls.fieldLabel}>Advance Paid (₹)</label>
-            <input type="number" value={form.advancePaid} onChange={(e) => setForm({ ...form, advancePaid: e.target.value })} className={fieldClass('advancePaid')} />
+            <NumberInput value={form.advancePaid} onChange={(v) => setForm({ ...form, advancePaid: v })} className={fieldClass('advancePaid')} />
           </div>
           <div>
             <label className={cls.fieldLabel}>Job Card Barcode</label>

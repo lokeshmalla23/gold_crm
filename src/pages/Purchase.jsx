@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Search, Plus, ShoppingCart, Package, Truck, IndianRupee, CheckCircle2, X, Eye, Wallet, ArrowLeft } from 'lucide-react';
 import { purchaseOrders as initialPOs, goodsReceiptNotes, purchaseReturns as initialReturns, suppliers, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const STATUS_BADGE = {
   Draft: cls.badgeColor.gray,
@@ -286,9 +287,9 @@ function NewPOModal({ onClose, onSave }) {
             {items.map((it, i) => (
               <div key={i} className="grid grid-cols-12 gap-2 items-end">
                 <input value={it.name} onChange={(e) => updateItem(i, 'name', e.target.value)} placeholder="Item name" className={`col-span-4 ${cls.inputSm}`} />
-                <input type="number" value={it.qty} onChange={(e) => updateItem(i, 'qty', e.target.value)} placeholder="Qty" className={`col-span-1 ${cls.inputSm}`} />
-                <input type="number" value={it.weight} onChange={(e) => updateItem(i, 'weight', e.target.value)} placeholder="Wt (g)" className={`col-span-2 ${cls.inputSm}`} />
-                <input type="number" value={it.rate} onChange={(e) => updateItem(i, 'rate', e.target.value)} placeholder="Rate" className={`col-span-2 ${cls.inputSm}`} />
+                <NumberInput value={it.qty} onChange={(v) => updateItem(i, 'qty', v)} placeholder="Qty" className={`col-span-1 ${cls.inputSm}`} />
+                <NumberInput allowDecimal value={it.weight} onChange={(v) => updateItem(i, 'weight', v)} placeholder="Wt (g)" className={`col-span-2 ${cls.inputSm}`} />
+                <NumberInput value={it.rate} onChange={(v) => updateItem(i, 'rate', v)} placeholder="Rate" className={`col-span-2 ${cls.inputSm}`} />
                 <div className="col-span-2 text-right text-sm font-semibold text-amber-600">{formatINR(it.amount)}</div>
                 <button onClick={() => setItems(items.filter((_, x) => x !== i))} className="col-span-1 text-red-500"><X className="w-4 h-4" /></button>
               </div>
@@ -324,7 +325,7 @@ function PaymentModal({ po, onClose, onSave }) {
           <div className="flex justify-between"><span>Paid:</span><span className="font-semibold text-emerald-600">{formatINR(po.paidAmount)}</span></div>
           <div className="flex justify-between"><span>Balance:</span><span className="font-semibold text-red-600">{formatINR(po.balance)}</span></div>
         </div>
-        <Field label="Amount"><input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value) || 0)} className={cls.input} /></Field>
+        <Field label="Amount"><NumberInput value={amount} onChange={(v) => setAmount(Number(v) || 0)} className={cls.input} /></Field>
         <Field label="Payment Mode">
           <select value={mode} onChange={(e) => setMode(e.target.value)} className={cls.input}>
             <option>Bank Transfer</option><option>Cheque</option><option>Cash</option><option>UPI</option>
@@ -409,10 +410,10 @@ function NewReturnModal({ onClose, onSave }) {
         </Field>
         <Field label="Item"><input value={item} onChange={(e) => setItem(e.target.value)} className={cls.input} /></Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Qty"><input type="number" value={qty} onChange={(e) => setQty(Number(e.target.value))} className={cls.input} /></Field>
-          <Field label="Weight (g)"><input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className={cls.input} /></Field>
+          <Field label="Qty"><NumberInput value={qty} onChange={(v) => setQty(Number(v))} className={cls.input} /></Field>
+          <Field label="Weight (g)"><NumberInput allowDecimal value={weight} onChange={(v) => setWeight(Number(v))} className={cls.input} /></Field>
         </div>
-        <Field label="Credit Amount"><input type="number" value={creditAmount} onChange={(e) => setCreditAmount(Number(e.target.value))} className={cls.input} /></Field>
+        <Field label="Credit Amount"><NumberInput value={creditAmount} onChange={(v) => setCreditAmount(Number(v))} className={cls.input} /></Field>
         <Field label="Reason"><textarea value={reason} onChange={(e) => setReason(e.target.value)} rows="3" className={cls.input} /></Field>
         <div className="flex gap-2 justify-end">
           <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
