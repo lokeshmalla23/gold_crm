@@ -357,7 +357,7 @@ export default function Reports() {
                 <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>PO #</Th><Th>Date</Th><Th>Supplier</Th><Th>Items</Th><Th>Total</Th><Th>Paid</Th><Th>Balance</Th><Th>Status</Th></tr></thead>
                 <tbody>
                   {purchaseOrders.map((p) => (
-                    <tr key={p.id} className="border-b border-gray-50 last:border-0">
+                    <tr key={p.id} className={cls.tableRow}>
                       <Td className="font-mono text-xs">{p.id}</Td>
                       <Td>{formatDate(p.date)}</Td>
                       <Td>{p.supplierName}</Td>
@@ -386,7 +386,7 @@ export default function Reports() {
                 <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Job #</Th><Th>Customer</Th><Th>Category</Th><Th>Received</Th><Th>Est. Cost</Th><Th>Final Cost</Th><Th>Status</Th></tr></thead>
                 <tbody>
                   {repairs.map((r) => (
-                    <tr key={r.id} className="border-b border-gray-50 last:border-0">
+                    <tr key={r.id} className={cls.tableRow}>
                       <Td className="font-mono text-xs">{r.id}</Td>
                       <Td>{r.customerName}</Td>
                       <Td>{r.category}</Td>

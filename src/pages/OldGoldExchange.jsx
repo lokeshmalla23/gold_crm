@@ -6,6 +6,7 @@ import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { oldGoldExchanges as initial, customers, formatINR, formatDate } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 export default function OldGoldExchange() {
   const [list, setList] = useState(initial);
@@ -144,7 +145,11 @@ function F({ label, value, onChange, type = 'text' }) {
   return (
     <div>
       <label className={cls.fieldLabel}>{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
+      {type === 'number' ? (
+        <NumberInput value={value} onChange={onChange} className={cls.input} />
+      ) : (
+        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
+      )}
     </div>
   );
 }

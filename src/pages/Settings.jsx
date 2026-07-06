@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Store, Coins, Percent, UserCog, Shield, Bell, Database, Save, ClipboardList, CheckCircle, XCircle } from 'lucide-react';
 import { shopSettings, auditLog } from '../data/mockData';
 import * as cls from '../styles/classes';
+import NumberInput from '../components/ui/NumberInput';
 
 const SECTIONS = [
   { key: 'shop', label: 'Shop Details', icon: Store },
@@ -257,7 +258,11 @@ function F({ label, value, onChange, type = 'text' }) {
   return (
     <div>
       <label className={cls.fieldLabel}>{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
+      {type === 'number' ? (
+        <NumberInput value={value} onChange={onChange} className={cls.input} />
+      ) : (
+        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
+      )}
     </div>
   );
 }
