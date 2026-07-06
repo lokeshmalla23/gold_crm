@@ -5,6 +5,7 @@ import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { oldGoldExchanges as initial, customers, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 export default function OldGoldExchange() {
   const [list, setList] = useState(initial);
@@ -66,32 +67,32 @@ export default function OldGoldExchange() {
         <StatCard label="Pending" value={pending} icon={ArrowLeftRight} iconBg="bg-yellow-100" iconColor="text-yellow-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+      <div className={cls.card}>
+        <div className={cls.cardHeader}>
           <h3 className="font-semibold text-gray-900">Exchange Records</h3>
-          <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2 shadow-sm"><Plus className="w-4 h-4" />New Exchange</button>
+          <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} text-sm flex items-center gap-2`}><Plus className="w-4 h-4" />New Exchange</button>
         </div>
         <DataTable columns={columns} data={list} pageSize={10} />
       </div>
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title="New Old Gold Exchange" size="lg"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Create Receipt</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Create Receipt</button>
         </>}
       >
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="block text-xs font-medium text-gray-700 mb-1">Customer *</label>
-            <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <label className={cls.fieldLabel}>Customer *</label>
+            <select value={form.customerId} onChange={(e) => setForm({ ...form, customerId: e.target.value })} className={cls.input}>
               <option value="">Select customer</option>
               {customers.map((c) => <option key={c.id} value={c.id}>{c.name} — {c.mobile}</option>)}
             </select>
           </div>
           <F label="Weight (g) *" type="number" value={form.weight} onChange={(v) => setForm({ ...form, weight: v })} />
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Purity</label>
-            <select value={form.purity} onChange={(e) => setForm({ ...form, purity: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <label className={cls.fieldLabel}>Purity</label>
+            <select value={form.purity} onChange={(e) => setForm({ ...form, purity: e.target.value })} className={cls.input}>
               {['22K', '24K', '18K'].map((p) => <option key={p}>{p}</option>)}
             </select>
           </div>
@@ -99,7 +100,7 @@ export default function OldGoldExchange() {
           <F label="Testing Charges" type="number" value={form.testingCharges} onChange={(v) => setForm({ ...form, testingCharges: v })} />
           <F label="Deduction %" type="number" value={form.deductionPercent} onChange={(v) => setForm({ ...form, deductionPercent: v })} />
         </div>
-        <div className="mt-4 p-4 bg-amber-50 rounded-lg">
+        <div className={`mt-4 ${cls.panel.amber}`}>
           <div className="text-xs text-amber-800">Calculated Exchange Value</div>
           <div className="text-2xl font-bold text-amber-700 mt-1">{formatINR(calcExchange())}</div>
         </div>
@@ -131,7 +132,7 @@ export default function OldGoldExchange() {
                 <span className="font-bold text-amber-600 text-xl">{formatINR(receipt.exchangeValue)}</span>
               </div>
             </div>
-            <button className="mt-4 w-full py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Print / Download</button>
+            <button className={`mt-4 w-full ${cls.btnPrimaryFull}`}>Print / Download</button>
           </div>
         )}
       </Modal>
@@ -142,8 +143,8 @@ export default function OldGoldExchange() {
 function F({ label, value, onChange, type = 'text' }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none" />
+      <label className={cls.fieldLabel}>{label}</label>
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
     </div>
   );
 }

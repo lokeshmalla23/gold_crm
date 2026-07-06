@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Search, Plus, Bookmark, IndianRupee, CalendarClock, AlertTriangle, X, Eye, Printer, CheckCircle2 } from 'lucide-react';
 import { reservations as initialReservations, customers, inventory, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
-const STATUS_COLORS = {
-  Active: 'bg-blue-100 text-blue-700',
-  Converted: 'bg-emerald-100 text-emerald-700',
-  Expired: 'bg-gray-100 text-gray-700',
-  Cancelled: 'bg-red-100 text-red-700',
+const STATUS_BADGE = {
+  Active: cls.badgeColor.blue,
+  Converted: cls.badgeColor.green,
+  Expired: cls.badgeColor.gray,
+  Cancelled: cls.badgeColor.red,
 };
 
 export default function Reservation() {
@@ -40,8 +41,8 @@ export default function Reservation() {
       )}
 
       <div>
-        <h2 className="text-xl font-bold text-gray-900">Reservations / Advance Bookings</h2>
-        <p className="text-sm text-gray-500">Items reserved with advance payments</p>
+        <h2 className={cls.pageTitle}>Reservations / Advance Bookings</h2>
+        <p className={cls.mutedText}>Items reserved with advance payments</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -51,28 +52,28 @@ export default function Reservation() {
         <StatCard label="Expired" value={stats.expired} icon={AlertTriangle} color="bg-red-50 text-red-700" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+      <div className={`${cls.cardMd} flex flex-wrap items-center gap-3`}>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search reservation or customer..." className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search reservation or customer..." className={cls.inputIcon} />
         </div>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={cls.inputSm}>
           <option>All</option><option>Active</option><option>Converted</option><option>Expired</option><option>Cancelled</option>
         </select>
-        <button onClick={() => setShowNew(true)} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
+        <button onClick={() => setShowNew(true)} className={`${cls.btnPrimary} text-sm flex items-center gap-2`}>
           <Plus className="w-4 h-4" />New Reservation
         </button>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className={`${cls.card} overflow-hidden`}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+            <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}>
               <Th>Res #</Th><Th>Customer</Th><Th>Item</Th><Th>Value</Th><Th>Advance</Th><Th>Balance</Th><Th>Reserved</Th><Th>Expiry</Th><Th>Status</Th><Th>Actions</Th>
             </tr></thead>
             <tbody>
               {filtered.map((r) => (
-                <tr key={r.id} className="border-b border-gray-50 last:border-0">
+                <tr key={r.id} className={cls.tableRow}>
                   <Td className="font-mono text-xs font-semibold">{r.id}</Td>
                   <Td><div className="font-medium">{r.customerName}</div><div className="text-xs text-gray-500">{r.mobile}</div></Td>
                   <Td><div>{r.itemName}</div><div className="text-xs text-gray-500 font-mono">{r.itemCode}</div></Td>
@@ -81,8 +82,8 @@ export default function Reservation() {
                   <Td className="text-red-600">{formatINR(r.balance)}</Td>
                   <Td>{formatDate(r.reservedDate)}</Td>
                   <Td>{formatDate(r.expiryDate)}</Td>
-                  <Td><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[r.status]}`}>{r.status}</span></Td>
-                  <Td><button onClick={() => setViewing(r)} className="p-1.5 rounded hover:bg-gray-100"><Eye className="w-4 h-4 text-gray-600" /></button></Td>
+                  <Td><span className={`${cls.badge} ${STATUS_BADGE[r.status]}`}>{r.status}</span></Td>
+                  <Td><button onClick={() => setViewing(r)} className={cls.btnGhost}><Eye className="w-4 h-4 text-gray-600" /></button></Td>
                 </tr>
               ))}
             </tbody>
@@ -103,7 +104,7 @@ export default function Reservation() {
 
 function StatCard({ label, value, icon: Icon, color }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className={cls.cardSm}>
       <div className="flex items-center justify-between">
         <div>
           <div className="text-xs text-gray-500 font-medium">{label}</div>
@@ -115,24 +116,24 @@ function StatCard({ label, value, icon: Icon, color }) {
   );
 }
 
-const Th = ({ children }) => <th className="text-left px-4 py-3 font-semibold">{children}</th>;
-const Td = ({ children, className = '' }) => <td className={`px-4 py-3 text-gray-700 ${className}`}>{children}</td>;
+const Th = ({ children }) => <th className={`${cls.tableCell} font-semibold`}>{children}</th>;
+const Td = ({ children, className = '' }) => <td className={`${cls.tableCell} text-gray-700 ${className}`}>{children}</td>;
 
 function Modal({ title, onClose, children }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white">
+    <div className={cls.modalOverlay}>
+      <div className={`${cls.modalBox} max-w-lg`}>
+        <div className={`${cls.modalHeader} sticky top-0 bg-white`}>
           <h3 className="font-semibold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-100"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className={cls.btnGhost}><X className="w-5 h-5" /></button>
         </div>
-        <div className="p-5">{children}</div>
+        <div className={cls.modalBody}>{children}</div>
       </div>
     </div>
   );
 }
 
-function Field({ label, children }) { return <div><label className="text-xs font-semibold text-gray-600 uppercase block mb-1">{label}</label>{children}</div>; }
+function Field({ label, children }) { return <div><label className={cls.sectionLabel}>{label}</label>{children}</div>; }
 
 function NewReservationModal({ onClose, onSave }) {
   const [customerId, setCustomerId] = useState(customers[0].id);
@@ -160,28 +161,28 @@ function NewReservationModal({ onClose, onSave }) {
     <Modal title="New Reservation" onClose={onClose}>
       <div className="space-y-3">
         <Field label="Customer">
-          <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={customerId} onChange={(e) => setCustomerId(e.target.value)} className={cls.input}>
             {customers.map((c) => <option key={c.id} value={c.id}>{c.name} · {c.mobile}</option>)}
           </select>
         </Field>
         <Field label="Item">
-          <select value={itemId} onChange={(e) => setItemId(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={itemId} onChange={(e) => setItemId(e.target.value)} className={cls.input}>
             {inventory.map((i) => <option key={i.id} value={i.id}>{i.name} ({i.itemCode}) · {formatINR(i.sellingPrice)}</option>)}
           </select>
         </Field>
-        <div className="p-3 bg-amber-50 rounded-lg text-sm">
+        <div className={cls.panel.amber}>
           <div className="flex justify-between"><span>Item Value:</span><span className="font-semibold">{formatINR(selectedItem?.sellingPrice || 0)}</span></div>
           <div className="flex justify-between"><span>Advance:</span><span className="font-semibold text-emerald-600">{formatINR(Number(advancePaid))}</span></div>
           <div className="flex justify-between"><span>Balance:</span><span className="font-semibold text-red-600">{formatINR(balance)}</span></div>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Advance Amount"><input type="number" value={advancePaid} onChange={(e) => setAdvance(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-          <Field label="Expiry Date"><input type="date" value={expiryDate} onChange={(e) => setExpiry(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+          <Field label="Advance Amount"><input type="number" value={advancePaid} onChange={(e) => setAdvance(e.target.value)} className={cls.input} /></Field>
+          <Field label="Expiry Date"><input type="date" value={expiryDate} onChange={(e) => setExpiry(e.target.value)} className={cls.input} /></Field>
         </div>
-        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows="2" className={cls.input} /></Field>
         <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={save} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium">Create Reservation</button>
+          <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={save} className={cls.btnPrimary}>Create Reservation</button>
         </div>
       </div>
     </Modal>
@@ -194,7 +195,7 @@ function DetailModal({ reservation, onClose, onAction }) {
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div><div className="text-xs text-gray-500">Customer</div><div className="font-medium">{reservation.customerName}</div><div className="text-xs text-gray-500">{reservation.mobile}</div></div>
-          <div><div className="text-xs text-gray-500">Status</div><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[reservation.status]}`}>{reservation.status}</span></div>
+          <div><div className={cls.mutedText}>Status</div><span className={`${cls.badge} ${STATUS_BADGE[reservation.status]}`}>{reservation.status}</span></div>
           <div className="col-span-2"><div className="text-xs text-gray-500">Item</div><div className="font-medium">{reservation.itemName} <span className="text-xs text-gray-500">({reservation.itemCode})</span></div></div>
           <div><div className="text-xs text-gray-500">Reserved</div><div>{formatDate(reservation.reservedDate)}</div></div>
           <div><div className="text-xs text-gray-500">Expiry</div><div>{formatDate(reservation.expiryDate)}</div></div>
@@ -212,7 +213,7 @@ function DetailModal({ reservation, onClose, onAction }) {
           <button onClick={() => onAction('convert')} className="px-3 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium">Convert to Invoice</button>
           <button onClick={() => onAction('extend')} className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium flex items-center gap-1"><CalendarClock className="w-4 h-4" />Extend Expiry</button>
           <button onClick={() => onAction('cancel')} className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg text-sm font-medium">Cancel</button>
-          <button className="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium flex items-center gap-1"><Printer className="w-4 h-4" />Print Receipt</button>
+          <button className={`${cls.btnSecondary} flex items-center gap-1`}><Printer className="w-4 h-4" />Print Receipt</button>
         </div>
       </div>
     </Modal>

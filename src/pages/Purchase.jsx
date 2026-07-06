@@ -1,22 +1,23 @@
 import { useMemo, useState } from 'react';
 import { Search, Plus, ShoppingCart, Package, Truck, IndianRupee, CheckCircle2, X, Eye, Wallet, ArrowLeft } from 'lucide-react';
 import { purchaseOrders as initialPOs, goodsReceiptNotes, purchaseReturns as initialReturns, suppliers, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
-const STATUS_COLORS = {
-  Draft: 'bg-gray-100 text-gray-700',
-  Ordered: 'bg-blue-100 text-blue-700',
-  Received: 'bg-emerald-100 text-emerald-700',
-  Cancelled: 'bg-red-100 text-red-700',
+const STATUS_BADGE = {
+  Draft: cls.badgeColor.gray,
+  Ordered: cls.badgeColor.blue,
+  Received: cls.badgeColor.green,
+  Cancelled: cls.badgeColor.red,
 };
-const PAY_COLORS = {
-  Pending: 'bg-red-100 text-red-700',
-  Partial: 'bg-amber-100 text-amber-700',
-  Paid: 'bg-emerald-100 text-emerald-700',
+const PAY_BADGE = {
+  Pending: cls.badgeColor.red,
+  Partial: cls.badgeColor.amber,
+  Paid: cls.badgeColor.green,
 };
-const QC_COLORS = {
-  Passed: 'bg-emerald-100 text-emerald-700',
-  Partial: 'bg-amber-100 text-amber-700',
-  Failed: 'bg-red-100 text-red-700',
+const QC_BADGE = {
+  Passed: cls.badgeColor.green,
+  Partial: cls.badgeColor.amber,
+  Failed: cls.badgeColor.red,
 };
 
 export default function Purchase() {
@@ -57,11 +58,11 @@ export default function Purchase() {
       )}
 
       <div>
-        <h2 className="text-xl font-bold text-gray-900">Purchase Management</h2>
-        <p className="text-sm text-gray-500">Manage purchase orders, goods receipts, and returns</p>
+        <h2 className={cls.pageTitle}>Purchase Management</h2>
+        <p className={cls.mutedText}>Manage purchase orders, goods receipts, and returns</p>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-1 inline-flex">
+      <div className={`${cls.card} p-1 inline-flex`}>
         {[
           { key: 'po', label: 'Purchase Orders' },
           { key: 'grn', label: 'Goods Receipt (GRN)' },
@@ -82,32 +83,32 @@ export default function Purchase() {
             <StatCard label="Pending Payments" value={formatINR(stats.pendingPayments)} icon={IndianRupee} color="bg-red-50 text-red-700" />
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap items-center gap-3">
+          <div className={`${cls.cardMd} flex flex-wrap items-center gap-3`}>
             <div className="relative flex-1 min-w-[200px]">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search PO # or supplier..." className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400" />
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search PO # or supplier..." className={cls.inputIcon} />
             </div>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={cls.inputSm}>
               <option>All</option><option>Draft</option><option>Ordered</option><option>Received</option><option>Cancelled</option>
             </select>
-            <select value={supplierFilter} onChange={(e) => setSupplierFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+            <select value={supplierFilter} onChange={(e) => setSupplierFilter(e.target.value)} className={cls.inputSm}>
               <option value="All">All Suppliers</option>
               {[...new Set(pos.map((p) => p.supplierName))].map((s) => <option key={s}>{s}</option>)}
             </select>
-            <button onClick={() => setShowNewPO(true)} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
+            <button onClick={() => setShowNewPO(true)} className={`${cls.btnPrimary} text-sm flex items-center gap-2`}>
               <Plus className="w-4 h-4" />New PO
             </button>
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className={`${cls.card} overflow-hidden`}>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}>
                   <Th>PO #</Th><Th>Date</Th><Th>Supplier</Th><Th>Items</Th><Th>Total</Th><Th>Paid</Th><Th>Balance</Th><Th>Status</Th><Th>Payment</Th><Th>Actions</Th>
                 </tr></thead>
                 <tbody>
                   {filteredPOs.map((p) => (
-                    <tr key={p.id} className="border-b border-gray-50 last:border-0">
+                    <tr key={p.id} className={cls.tableRow}>
                       <Td className="font-mono text-xs font-semibold">{p.id}</Td>
                       <Td>{formatDate(p.date)}</Td>
                       <Td>{p.supplierName}</Td>
@@ -115,11 +116,11 @@ export default function Purchase() {
                       <Td className="font-semibold">{formatINR(p.total)}</Td>
                       <Td className="text-emerald-600">{formatINR(p.paidAmount)}</Td>
                       <Td className="text-red-600">{formatINR(p.balance)}</Td>
-                      <Td><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[p.status]}`}>{p.status}</span></Td>
-                      <Td><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${PAY_COLORS[p.paymentStatus]}`}>{p.paymentStatus}</span></Td>
+                      <Td><span className={`${cls.badge} ${STATUS_BADGE[p.status]}`}>{p.status}</span></Td>
+                      <Td><span className={`${cls.badge} ${PAY_BADGE[p.paymentStatus]}`}>{p.paymentStatus}</span></Td>
                       <Td>
                         <div className="flex gap-1">
-                          <button onClick={() => setViewingPO(p)} className="p-1.5 rounded hover:bg-gray-100" title="View"><Eye className="w-4 h-4 text-gray-600" /></button>
+                          <button onClick={() => setViewingPO(p)} className={cls.btnGhost} title="View"><Eye className="w-4 h-4 text-gray-600" /></button>
                           {p.balance > 0 && <button onClick={() => setPayingPO(p)} className="p-1.5 rounded hover:bg-emerald-50" title="Record Payment"><Wallet className="w-4 h-4 text-emerald-600" /></button>}
                         </div>
                       </Td>
@@ -133,7 +134,7 @@ export default function Purchase() {
       )}
 
       {tab === 'grn' && (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className={`${cls.card} overflow-hidden`}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
@@ -141,15 +142,15 @@ export default function Purchase() {
               </tr></thead>
               <tbody>
                 {goodsReceiptNotes.map((g) => (
-                  <tr key={g.id} className="border-b border-gray-50 last:border-0">
+                  <tr key={g.id} className={cls.tableRow}>
                     <Td className="font-mono text-xs font-semibold">{g.id}</Td>
                     <Td className="font-mono text-xs">{g.poId}</Td>
                     <Td>{formatDate(g.date)}</Td>
                     <Td>{g.receivedBy}</Td>
                     <Td>{g.items.length}</Td>
                     <Td>{g.totalWeight}g</Td>
-                    <Td><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${QC_COLORS[g.qualityCheck]}`}>{g.qualityCheck}</span></Td>
-                    <Td><button onClick={() => setViewingGRN(g)} className="p-1.5 rounded hover:bg-gray-100"><Eye className="w-4 h-4 text-gray-600" /></button></Td>
+                    <Td><span className={`${cls.badge} ${QC_BADGE[g.qualityCheck]}`}>{g.qualityCheck}</span></Td>
+                    <Td><button onClick={() => setViewingGRN(g)} className={cls.btnGhost}><Eye className="w-4 h-4 text-gray-600" /></button></Td>
                   </tr>
                 ))}
               </tbody>
@@ -161,19 +162,19 @@ export default function Purchase() {
       {tab === 'return' && (
         <>
           <div className="flex justify-end">
-            <button onClick={() => setShowNewReturn(true)} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
+            <button onClick={() => setShowNewReturn(true)} className={`${cls.btnPrimary} text-sm flex items-center gap-2`}>
               <Plus className="w-4 h-4" />New Return
             </button>
           </div>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className={`${cls.card} overflow-hidden`}>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100 text-xs uppercase text-gray-600">
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}>
                   <Th>Return #</Th><Th>PO Ref</Th><Th>Date</Th><Th>Supplier</Th><Th>Item</Th><Th>Qty</Th><Th>Weight</Th><Th>Reason</Th><Th>Credit</Th><Th>Status</Th>
                 </tr></thead>
                 <tbody>
                   {returns.map((r) => (
-                    <tr key={r.id} className="border-b border-gray-50 last:border-0">
+                    <tr key={r.id} className={cls.tableRow}>
                       <Td className="font-mono text-xs font-semibold">{r.id}</Td>
                       <Td className="font-mono text-xs">{r.poId}</Td>
                       <Td>{formatDate(r.date)}</Td>
@@ -183,7 +184,7 @@ export default function Purchase() {
                       <Td>{r.weight}g</Td>
                       <Td className="text-xs text-gray-600 max-w-xs">{r.reason}</Td>
                       <Td className="font-semibold text-amber-600">{formatINR(r.creditAmount)}</Td>
-                      <Td><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${r.status === 'Credited' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>{r.status}</span></Td>
+                      <Td><span className={`${cls.badge} ${r.status === 'Credited' ? cls.badgeColor.green : cls.badgeColor.amber}`}>{r.status}</span></Td>
                     </tr>
                   ))}
                 </tbody>
@@ -207,30 +208,30 @@ export default function Purchase() {
 
 function StatCard({ label, value, icon: Icon, color }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className={cls.cardSm}>
       <div className="flex items-center justify-between">
         <div>
-          <div className="text-xs text-gray-500 font-medium">{label}</div>
+          <div className={`${cls.mutedText} font-medium`}>{label}</div>
           <div className="text-lg font-bold text-gray-900 mt-1">{value}</div>
         </div>
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${color}`}><Icon className="w-5 h-5" /></div>
+        <div className={`${cls.iconBox.md} ${color}`}><Icon className="w-5 h-5" /></div>
       </div>
     </div>
   );
 }
 
-const Th = ({ children }) => <th className="text-left px-4 py-3 font-semibold">{children}</th>;
-const Td = ({ children, className = '' }) => <td className={`px-4 py-3 text-gray-700 ${className}`}>{children}</td>;
+const Th = ({ children }) => <th className={`${cls.tableCell} font-semibold`}>{children}</th>;
+const Td = ({ children, className = '' }) => <td className={`${cls.tableCell} text-gray-700 ${className}`}>{children}</td>;
 
 function ModalShell({ title, onClose, children, wide }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className={`bg-white rounded-xl shadow-xl w-full ${wide ? 'max-w-3xl' : 'max-w-lg'} max-h-[90vh] overflow-y-auto`}>
-        <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white">
+    <div className={cls.modalOverlay}>
+      <div className={`${cls.modalBox} ${wide ? 'max-w-3xl' : 'max-w-lg'}`}>
+        <div className={`${cls.modalHeader} sticky top-0 bg-white`}>
           <h3 className="font-semibold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-100"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className={cls.btnGhost}><X className="w-5 h-5" /></button>
         </div>
-        <div className="p-5">{children}</div>
+        <div className={cls.modalBody}>{children}</div>
       </div>
     </div>
   );
@@ -268,26 +269,26 @@ function NewPOModal({ onClose, onSave }) {
       <div className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <Field label="Supplier">
-            <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+            <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className={cls.input}>
               {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
           </Field>
-          <Field label="Date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-          <Field label="Expected Date"><input type="date" value={expectedDate} onChange={(e) => setExpectedDate(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+          <Field label="Date"><input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={cls.input} /></Field>
+          <Field label="Expected Date"><input type="date" value={expectedDate} onChange={(e) => setExpectedDate(e.target.value)} className={cls.input} /></Field>
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-gray-600 uppercase">Items</label>
+            <label className={cls.sectionLabel}>Items</label>
             <button onClick={() => setItems([...items, { name: '', qty: 1, weight: 0, rate: 6250, amount: 0 }])} className="text-xs px-2 py-1 rounded bg-amber-50 text-amber-700 font-medium">+ Add Item</button>
           </div>
           <div className="space-y-2">
             {items.map((it, i) => (
               <div key={i} className="grid grid-cols-12 gap-2 items-end">
-                <input value={it.name} onChange={(e) => updateItem(i, 'name', e.target.value)} placeholder="Item name" className="col-span-4 px-2 py-1.5 border border-gray-200 rounded text-sm" />
-                <input type="number" value={it.qty} onChange={(e) => updateItem(i, 'qty', e.target.value)} placeholder="Qty" className="col-span-1 px-2 py-1.5 border border-gray-200 rounded text-sm" />
-                <input type="number" value={it.weight} onChange={(e) => updateItem(i, 'weight', e.target.value)} placeholder="Wt (g)" className="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm" />
-                <input type="number" value={it.rate} onChange={(e) => updateItem(i, 'rate', e.target.value)} placeholder="Rate" className="col-span-2 px-2 py-1.5 border border-gray-200 rounded text-sm" />
+                <input value={it.name} onChange={(e) => updateItem(i, 'name', e.target.value)} placeholder="Item name" className={`col-span-4 ${cls.inputSm}`} />
+                <input type="number" value={it.qty} onChange={(e) => updateItem(i, 'qty', e.target.value)} placeholder="Qty" className={`col-span-1 ${cls.inputSm}`} />
+                <input type="number" value={it.weight} onChange={(e) => updateItem(i, 'weight', e.target.value)} placeholder="Wt (g)" className={`col-span-2 ${cls.inputSm}`} />
+                <input type="number" value={it.rate} onChange={(e) => updateItem(i, 'rate', e.target.value)} placeholder="Rate" className={`col-span-2 ${cls.inputSm}`} />
                 <div className="col-span-2 text-right text-sm font-semibold text-amber-600">{formatINR(it.amount)}</div>
                 <button onClick={() => setItems(items.filter((_, x) => x !== i))} className="col-span-1 text-red-500"><X className="w-4 h-4" /></button>
               </div>
@@ -301,11 +302,11 @@ function NewPOModal({ onClose, onSave }) {
           <Row label="Total" value={formatINR(total)} bold />
         </div>
 
-        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" rows="2" /></Field>
+        <Field label="Notes"><textarea value={notes} onChange={(e) => setNotes(e.target.value)} className={cls.input} rows="2" /></Field>
 
         <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={save} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium">Save PO</button>
+          <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={save} className={cls.btnPrimary}>Save PO</button>
         </div>
       </div>
     </ModalShell>
@@ -318,20 +319,20 @@ function PaymentModal({ po, onClose, onSave }) {
   return (
     <ModalShell title={`Record Payment · ${po.id}`} onClose={onClose}>
       <div className="space-y-3">
-        <div className="p-3 bg-amber-50 rounded-lg text-sm">
+        <div className={cls.panel.amber}>
           <div className="flex justify-between"><span>Total:</span><span className="font-semibold">{formatINR(po.total)}</span></div>
           <div className="flex justify-between"><span>Paid:</span><span className="font-semibold text-emerald-600">{formatINR(po.paidAmount)}</span></div>
           <div className="flex justify-between"><span>Balance:</span><span className="font-semibold text-red-600">{formatINR(po.balance)}</span></div>
         </div>
-        <Field label="Amount"><input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value) || 0)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="Amount"><input type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value) || 0)} className={cls.input} /></Field>
         <Field label="Payment Mode">
-          <select value={mode} onChange={(e) => setMode(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={mode} onChange={(e) => setMode(e.target.value)} className={cls.input}>
             <option>Bank Transfer</option><option>Cheque</option><option>Cash</option><option>UPI</option>
           </select>
         </Field>
         <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={() => onSave(amount)} className="px-4 py-2 bg-emerald-500 text-white rounded-lg text-sm font-medium">Record Payment</button>
+          <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={() => onSave(amount)} className={cls.btnDanger}>Record Payment</button>
         </div>
       </div>
     </ModalShell>
@@ -345,10 +346,10 @@ function ViewPOModal({ po, onClose }) {
         <div><div className="text-xs text-gray-500">Supplier</div><div className="font-medium">{po.supplierName}</div></div>
         <div><div className="text-xs text-gray-500">Date</div><div>{formatDate(po.date)}</div></div>
         <div><div className="text-xs text-gray-500">Expected</div><div>{formatDate(po.expectedDate)}</div></div>
-        <div><div className="text-xs text-gray-500">Status</div><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[po.status]}`}>{po.status}</span></div>
+        <div><div className={cls.mutedText}>Status</div><span className={`${cls.badge} ${STATUS_BADGE[po.status]}`}>{po.status}</span></div>
       </div>
       <table className="w-full text-sm border border-gray-100 rounded overflow-hidden">
-        <thead className="bg-gray-50 text-xs uppercase text-gray-600"><tr><Th>Item</Th><Th>Qty</Th><Th>Weight</Th><Th>Rate</Th><Th>Amount</Th></tr></thead>
+        <thead className={cls.tableHeader}><tr><Th>Item</Th><Th>Qty</Th><Th>Weight</Th><Th>Rate</Th><Th>Amount</Th></tr></thead>
         <tbody>
           {po.items.map((it, i) => (
             <tr key={i} className="border-t border-gray-100"><Td>{it.name}</Td><Td>{it.qty}</Td><Td>{it.weight}g</Td><Td>{formatINR(it.rate)}</Td><Td className="font-semibold">{formatINR(it.amount)}</Td></tr>
@@ -374,10 +375,10 @@ function ViewGRNModal({ grn, onClose }) {
         <div><div className="text-xs text-gray-500">PO Ref</div><div className="font-mono">{grn.poId}</div></div>
         <div><div className="text-xs text-gray-500">Date</div><div>{formatDate(grn.date)}</div></div>
         <div><div className="text-xs text-gray-500">Received By</div><div>{grn.receivedBy}</div></div>
-        <div><div className="text-xs text-gray-500">Quality</div><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${QC_COLORS[grn.qualityCheck]}`}>{grn.qualityCheck}</span></div>
+        <div><div className={cls.mutedText}>Quality</div><span className={`${cls.badge} ${QC_BADGE[grn.qualityCheck]}`}>{grn.qualityCheck}</span></div>
       </div>
       <table className="w-full text-sm border border-gray-100 rounded overflow-hidden">
-        <thead className="bg-gray-50 text-xs uppercase text-gray-600"><tr><Th>Item</Th><Th>Ordered</Th><Th>Received</Th><Th>Weight</Th><Th>Condition</Th></tr></thead>
+        <thead className={cls.tableHeader}><tr><Th>Item</Th><Th>Ordered</Th><Th>Received</Th><Th>Weight</Th><Th>Condition</Th></tr></thead>
         <tbody>
           {grn.items.map((it, i) => (
             <tr key={i} className="border-t border-gray-100"><Td>{it.name}</Td><Td>{it.orderedQty}</Td><Td>{it.receivedQty}</Td><Td>{it.weight}g</Td><Td>{it.condition}</Td></tr>
@@ -400,27 +401,27 @@ function NewReturnModal({ onClose, onSave }) {
   return (
     <ModalShell title="New Purchase Return" onClose={onClose}>
       <div className="space-y-3">
-        <Field label="PO Reference"><input value={poId} onChange={(e) => setPoId(e.target.value)} placeholder="PO-001" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="PO Reference"><input value={poId} onChange={(e) => setPoId(e.target.value)} placeholder="PO-001" className={cls.input} /></Field>
         <Field label="Supplier">
-          <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={supplierName} onChange={(e) => setSupplierName(e.target.value)} className={cls.input}>
             {suppliers.map((s) => <option key={s.id}>{s.name}</option>)}
           </select>
         </Field>
-        <Field label="Item"><input value={item} onChange={(e) => setItem(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="Item"><input value={item} onChange={(e) => setItem(e.target.value)} className={cls.input} /></Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Qty"><input type="number" value={qty} onChange={(e) => setQty(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-          <Field label="Weight (g)"><input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+          <Field label="Qty"><input type="number" value={qty} onChange={(e) => setQty(Number(e.target.value))} className={cls.input} /></Field>
+          <Field label="Weight (g)"><input type="number" value={weight} onChange={(e) => setWeight(Number(e.target.value))} className={cls.input} /></Field>
         </div>
-        <Field label="Credit Amount"><input type="number" value={creditAmount} onChange={(e) => setCreditAmount(Number(e.target.value))} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
-        <Field label="Reason"><textarea value={reason} onChange={(e) => setReason(e.target.value)} rows="3" className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm" /></Field>
+        <Field label="Credit Amount"><input type="number" value={creditAmount} onChange={(e) => setCreditAmount(Number(e.target.value))} className={cls.input} /></Field>
+        <Field label="Reason"><textarea value={reason} onChange={(e) => setReason(e.target.value)} rows="3" className={cls.input} /></Field>
         <div className="flex gap-2 justify-end">
-          <button onClick={onClose} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={() => onSave({ id: 'PR-' + String(Math.floor(Math.random() * 900) + 100), poId, date: '2026-07-06', supplierName, item, qty, weight, reason, creditAmount, status: 'Pending' })} className="px-4 py-2 bg-amber-500 text-white rounded-lg text-sm font-medium">Save Return</button>
+          <button onClick={onClose} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={() => onSave({ id: 'PR-' + String(Math.floor(Math.random() * 900) + 100), poId, date: '2026-07-06', supplierName, item, qty, weight, reason, creditAmount, status: 'Pending' })} className={cls.btnPrimary}>Save Return</button>
         </div>
       </div>
     </ModalShell>
   );
 }
 
-function Field({ label, children }) { return <div><label className="text-xs font-semibold text-gray-600 uppercase block mb-1">{label}</label>{children}</div>; }
+function Field({ label, children }) { return <div><label className={cls.sectionLabel}>{label}</label>{children}</div>; }
 function Row({ label, value, bold }) { return <div className="flex justify-between"><span className={bold ? 'font-semibold text-gray-900' : 'text-gray-600'}>{label}</span><span className={bold ? 'font-bold text-amber-600' : 'text-gray-900'}>{value}</span></div>; }

@@ -5,6 +5,7 @@ import Badge from '../components/ui/Badge';
 import Modal from '../components/ui/Modal';
 import StatCard from '../components/ui/StatCard';
 import { staff as initial, attendance, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const TABS = ['Staff List', 'Attendance', 'Roles & Permissions'];
 
@@ -79,15 +80,15 @@ export default function Staff() {
         <StatCard label="Roles" value={ROLES.length} icon={Shield} iconBg="bg-purple-100" iconColor="text-purple-600" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-3">
+      <div className={cls.card}>
+        <div className={cls.cardHeader}>
           <div className="flex items-center gap-1 bg-gray-50 rounded-lg p-1">
             {TABS.map((t) => (
               <button key={t} onClick={() => setTab(t)} className={`px-3 py-1.5 rounded-md text-sm font-medium ${tab === t ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-600'}`}>{t}</button>
             ))}
           </div>
           {tab === 'Staff List' && (
-            <button onClick={() => setShowModal(true)} className="px-3 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium text-sm flex items-center gap-2"><Plus className="w-4 h-4" />Add Employee</button>
+            <button onClick={() => setShowModal(true)} className={`${cls.btnPrimary} text-sm flex items-center gap-2`}><Plus className="w-4 h-4" />Add Employee</button>
           )}
         </div>
 
@@ -96,7 +97,7 @@ export default function Staff() {
         {tab === 'Roles & Permissions' && (
           <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {ROLES.map((r) => (
-              <div key={r.role} className="p-4 border border-gray-200 rounded-lg">
+              <div key={r.role} className={cls.cardSm}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="font-semibold text-gray-900">{r.role}</div>
                   <Badge variant="blue">{r.count}</Badge>
@@ -118,15 +119,15 @@ export default function Staff() {
 
       <Modal open={showModal} onClose={() => setShowModal(false)} title="Add New Employee"
         footer={<>
-          <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-          <button onClick={handleAdd} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Save Employee</button>
+          <button onClick={() => setShowModal(false)} className={cls.btnSecondary}>Cancel</button>
+          <button onClick={handleAdd} className={cls.btnPrimary}>Save Employee</button>
         </>}
       >
         <div className="grid grid-cols-2 gap-4">
           <F label="Full Name *" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">Role</label>
-            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+            <label className={cls.fieldLabel}>Role</label>
+            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className={cls.input}>
               {ROLES.map((r) => <option key={r.role}>{r.role}</option>)}
             </select>
           </div>
@@ -143,8 +144,8 @@ export default function Staff() {
 function F({ label, value, onChange, type = 'text' }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none" />
+      <label className={cls.fieldLabel}>{label}</label>
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
     </div>
   );
 }

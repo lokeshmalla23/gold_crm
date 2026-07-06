@@ -3,6 +3,7 @@ import Badge from '../components/ui/Badge';
 import StatCard from '../components/ui/StatCard';
 import { invoices, formatINR, formatDate } from '../data/mockData';
 import { ShoppingBag, CheckCircle, Clock, IndianRupee } from 'lucide-react';
+import * as cls from '../styles/classes';
 
 export default function Orders() {
   const paid = invoices.filter((i) => i.status === 'Paid').length;
@@ -27,8 +28,8 @@ export default function Orders() {
         <StatCard label="Partial" value={partial} icon={Clock} iconBg="bg-yellow-100" iconColor="text-yellow-600" />
         <StatCard label="Total Revenue" value={formatINR(revenue)} icon={IndianRupee} iconBg="bg-amber-100" iconColor="text-amber-600" />
       </div>
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="p-4 border-b border-gray-100">
+      <div className={cls.card}>
+        <div className={cls.cardHeader}>
           <h3 className="font-semibold text-gray-900">Recent Orders</h3>
         </div>
         <DataTable columns={columns} data={invoices} pageSize={10} />

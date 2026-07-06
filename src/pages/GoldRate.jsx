@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { TrendingUp, TrendingDown, Bell, RefreshCw, Check, Plus, Trash2 } from 'lucide-react';
 import { goldRateHistory, shopSettings, formatINR, formatDate } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 export default function GoldRate() {
   const latest = goldRateHistory[goldRateHistory.length - 1];
@@ -55,11 +56,11 @@ export default function GoldRate() {
         <RateCard label="18K Gold" rate={latest.rate18K} change={change18} color="from-amber-300 to-yellow-400" />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className={cls.cardMd}>
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="font-semibold text-gray-900">Gold Rate History — Last 30 Days</h3>
-            <p className="text-xs text-gray-500">Track price movements across purities</p>
+            <p className={cls.mutedText}>Track price movements across purities</p>
           </div>
           <div className="flex items-center gap-3 text-sm">
             <label className="flex items-center gap-1.5"><input type="checkbox" checked={show22} onChange={(e) => setShow22(e.target.checked)} /> 22K</label>
@@ -82,37 +83,37 @@ export default function GoldRate() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className={cls.cardMd}>
           <h3 className="font-semibold text-gray-900 mb-1">Manual Rate Update</h3>
-          <p className="text-xs text-gray-500 mb-4">Update 22K — 24K and 18K auto-calculated</p>
+          <p className={`${cls.mutedText} mb-4`}>Update 22K — 24K and 18K auto-calculated</p>
           <div className="space-y-3">
             <div>
-              <label className="text-xs font-medium text-gray-700">22K Gold Rate (₹/gram) *</label>
-              <input type="number" value={rate22K} onChange={(e) => setRate22K(Number(e.target.value) || 0)} className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none" />
+              <label className={cls.fieldLabel}>22K Gold Rate (₹/gram) *</label>
+              <input type="number" value={rate22K} onChange={(e) => setRate22K(Number(e.target.value) || 0)} className={`mt-1 ${cls.input}`} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium text-gray-700">24K (auto)</label>
+                <label className={cls.fieldLabel}>24K (auto)</label>
                 <div className="mt-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium">{formatINR(auto24)}</div>
               </div>
               <div>
-                <label className="text-xs font-medium text-gray-700">18K (auto)</label>
+                <label className={cls.fieldLabel}>18K (auto)</label>
                 <div className="mt-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium">{formatINR(auto18)}</div>
               </div>
             </div>
-            <div className="text-xs text-gray-500">Last updated: {lastUpdated}</div>
-            <button onClick={updateRates} className="w-full py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-white rounded-lg font-medium text-sm">Update Rates</button>
+            <div className={cls.mutedText}>Last updated: {lastUpdated}</div>
+            <button onClick={updateRates} className={cls.btnPrimaryFull}>Update Rates</button>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
+        <div className={cls.cardMd}>
           <div className="flex items-center justify-between mb-1">
             <h3 className="font-semibold text-gray-900">MCX Live Rates</h3>
-            <button onClick={() => setMcxKey((k) => k + 1)} className="p-1.5 rounded hover:bg-gray-100 text-gray-500"><RefreshCw className="w-4 h-4" /></button>
+            <button onClick={() => setMcxKey((k) => k + 1)} className={cls.btnGhost}><RefreshCw className="w-4 h-4" /></button>
           </div>
-          <p className="text-xs text-gray-500 mb-4">Reference spot rates from MCX exchange</p>
+          <p className={`${cls.mutedText} mb-4`}>Reference spot rates from MCX exchange</p>
           <div key={mcxKey} className="space-y-3">
-            <div className="p-4 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200">
+            <div className={`${cls.panel.amber} p-4`}>
               <div className="text-xs text-amber-700 uppercase">MCX Spot Gold (24K)</div>
               <div className="text-2xl font-bold text-amber-700 mt-1">₹ 68,450 <span className="text-sm font-normal">per 10g</span></div>
               <div className="text-xs text-gray-500 mt-1">Last synced: 2 min ago</div>
@@ -131,25 +132,25 @@ export default function GoldRate() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div className={cls.cardMd}>
         <div className="flex items-center gap-2 mb-4">
           <Bell className="w-5 h-5 text-amber-600" />
           <h3 className="font-semibold text-gray-900">Rate Alerts</h3>
         </div>
         <div className="flex gap-2 mb-4 flex-wrap">
-          <select value={newAlert.type} onChange={(e) => setNewAlert({ ...newAlert, type: e.target.value })} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={newAlert.type} onChange={(e) => setNewAlert({ ...newAlert, type: e.target.value })} className={cls.inputSm}>
             <option>High</option>
             <option>Low</option>
           </select>
-          <select value={newAlert.purity} onChange={(e) => setNewAlert({ ...newAlert, purity: e.target.value })} className="px-3 py-2 border border-gray-200 rounded-lg text-sm">
+          <select value={newAlert.purity} onChange={(e) => setNewAlert({ ...newAlert, purity: e.target.value })} className={cls.inputSm}>
             <option>22K</option><option>24K</option><option>18K</option>
           </select>
-          <input type="number" placeholder="Target rate ₹" value={newAlert.target} onChange={(e) => setNewAlert({ ...newAlert, target: e.target.value })} className="px-3 py-2 border border-gray-200 rounded-lg text-sm" />
-          <button onClick={addAlert} className="px-3 py-2 bg-amber-500 text-white rounded-lg text-sm flex items-center gap-1.5"><Plus className="w-4 h-4" />Add Alert</button>
+          <input type="number" placeholder="Target rate ₹" value={newAlert.target} onChange={(e) => setNewAlert({ ...newAlert, target: e.target.value })} className={cls.inputSm} />
+          <button onClick={addAlert} className={`${cls.btnPrimary} text-sm flex items-center gap-1.5`}><Plus className="w-4 h-4" />Add Alert</button>
         </div>
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 text-xs uppercase text-gray-600">
+            <tr className={cls.tableHeader}>
               <th className="text-left px-3 py-2">Type</th>
               <th className="text-left px-3 py-2">Purity</th>
               <th className="text-left px-3 py-2">Target</th>
@@ -159,7 +160,7 @@ export default function GoldRate() {
           </thead>
           <tbody>
             {alerts.map((a) => (
-              <tr key={a.id} className="border-b border-gray-50 last:border-0">
+              <tr key={a.id} className={cls.tableRow}>
                 <td className="px-3 py-2">
                   <span className={`inline-flex items-center gap-1 ${a.type === 'High' ? 'text-emerald-600' : 'text-red-600'}`}>
                     {a.type === 'High' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
@@ -169,7 +170,7 @@ export default function GoldRate() {
                 <td className="px-3 py-2">{a.purity}</td>
                 <td className="px-3 py-2 font-medium">{formatINR(a.target)}</td>
                 <td className="px-3 py-2">
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${a.active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-600'}`}>{a.active ? 'Active' : 'Inactive'}</span>
+                  <span className={`${cls.badge} ${a.active ? cls.badgeColor.green : cls.badgeColor.gray}`}>{a.active ? 'Active' : 'Inactive'}</span>
                 </td>
                 <td className="px-3 py-2">
                   <button onClick={() => setAlerts((al) => al.filter((x) => x.id !== a.id))} className="text-red-500 hover:text-red-700"><Trash2 className="w-4 h-4" /></button>

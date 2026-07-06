@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { FileText, Download, Printer, TrendingUp, Package, Users, UserCog, Receipt, ShoppingCart, Wrench, Truck } from 'lucide-react';
 import { monthlySales, categorySales, dailySales, invoices, staff, customers, inventory, repairs, purchaseOrders, suppliers, formatINR, formatDate, gstrData } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const REPORTS = [
   { key: 'daily', label: 'Daily Sales', icon: TrendingUp },
@@ -35,8 +36,8 @@ export default function Reports() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
-      <aside className="bg-white rounded-xl border border-gray-200 p-3 h-fit">
-        <div className="text-xs font-semibold text-gray-500 uppercase px-3 py-2">Report Types</div>
+      <aside className={`${cls.card} p-3 h-fit`}>
+        <div className={`${cls.sectionLabel} px-3 py-2`}>Report Types</div>
         <nav className="space-y-1">
           {REPORTS.map((r) => {
             const Icon = r.icon;
@@ -50,23 +51,23 @@ export default function Reports() {
       </aside>
 
       <div className="lg:col-span-3 space-y-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap items-center justify-between gap-3">
+        <div className={`${cls.cardMd} flex flex-wrap items-center justify-between gap-3`}>
           <div>
             <h3 className="font-semibold text-gray-900">{REPORTS.find((r) => r.key === active)?.label}</h3>
-            <p className="text-xs text-gray-500">Detailed insights and analytics</p>
+            <p className={cls.mutedText}>Detailed insights and analytics</p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm" />
+            <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={cls.inputSm} />
             <span className="text-gray-400">to</span>
-            <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm" />
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm"><Download className="w-4 h-4" />PDF</button>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm"><Download className="w-4 h-4" />Excel</button>
-            <button className="px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 flex items-center gap-2 text-sm"><Printer className="w-4 h-4" />Print</button>
+            <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={cls.inputSm} />
+            <button className={`${cls.btnIcon} flex items-center gap-2`}><Download className="w-4 h-4" />PDF</button>
+            <button className={`${cls.btnIcon} flex items-center gap-2`}><Download className="w-4 h-4" />Excel</button>
+            <button className={`${cls.btnIcon} flex items-center gap-2`}><Printer className="w-4 h-4" />Print</button>
           </div>
         </div>
 
         {active === 'daily' && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className={cls.cardMd}>
             <h4 className="font-semibold mb-4">Daily Sales — Last 7 Days</h4>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={dailySales}>
@@ -82,7 +83,7 @@ export default function Reports() {
 
         {active === 'monthly' && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className={cls.cardMd}>
               <h4 className="font-semibold mb-4">Monthly Sales vs Profit</h4>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={monthlySales}>
@@ -96,12 +97,12 @@ export default function Reports() {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className={`${cls.card} overflow-hidden`}>
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Month</Th><Th>Sales</Th><Th>Profit</Th><Th>Margin</Th></tr></thead>
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Month</Th><Th>Sales</Th><Th>Profit</Th><Th>Margin</Th></tr></thead>
                 <tbody>
                   {monthlySales.map((m) => (
-                    <tr key={m.month} className="border-b border-gray-50 last:border-0">
+                    <tr key={m.month} className={cls.tableRow}>
                       <Td>{m.month}</Td>
                       <Td>{formatINR(m.sales)}</Td>
                       <Td className="text-emerald-600 font-semibold">{formatINR(m.profit)}</Td>
@@ -115,16 +116,16 @@ export default function Reports() {
         )}
 
         {active === 'gst' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className={`${cls.card} overflow-hidden`}>
             <div className="p-5 border-b border-gray-100">
               <h4 className="font-semibold">GST Collection Report</h4>
-              <p className="text-xs text-gray-500 mt-1">GST @ 3% on gold sales</p>
+              <p className={`${cls.mutedText} mt-1`}>GST @ 3% on gold sales</p>
             </div>
             <table className="w-full text-sm">
-              <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Invoice</Th><Th>Date</Th><Th>Customer</Th><Th>Taxable</Th><Th>GST</Th><Th>Total</Th></tr></thead>
+              <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Invoice</Th><Th>Date</Th><Th>Customer</Th><Th>Taxable</Th><Th>GST</Th><Th>Total</Th></tr></thead>
               <tbody>
                 {invoices.map((i) => (
-                  <tr key={i.id} className="border-b border-gray-50 last:border-0">
+                  <tr key={i.id} className={cls.tableRow}>
                     <Td>{i.id}</Td>
                     <Td>{formatDate(i.date)}</Td>
                     <Td>{i.customerName}</Td>
@@ -135,7 +136,7 @@ export default function Reports() {
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-50 font-semibold"><Td colSpan={4}>Total GST Collected</Td><Td className="text-amber-600">{formatINR(invoices.reduce((s, i) => s + i.gst, 0))}</Td><Td>{formatINR(invoices.reduce((s, i) => s + i.totalAmount, 0))}</Td></tr>
+                <tr className={`${cls.tableFooter} font-semibold`}><Td colSpan={4}>Total GST Collected</Td><Td className="text-amber-600">{formatINR(invoices.reduce((s, i) => s + i.gst, 0))}</Td><Td>{formatINR(invoices.reduce((s, i) => s + i.totalAmount, 0))}</Td></tr>
               </tfoot>
             </table>
           </div>
@@ -156,27 +157,27 @@ export default function Reports() {
                 </div>
               ))}
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-              <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+            <div className={`${cls.card} overflow-hidden`}>
+              <div className={cls.cardHeader}>
                 <div>
                   <h4 className="font-semibold">GSTR-1 — Outward Supplies</h4>
-                  <p className="text-xs text-gray-500 mt-0.5">Period: {gstrData.summary.period}</p>
+                  <p className={`${cls.mutedText} mt-0.5`}>Period: {gstrData.summary.period}</p>
                 </div>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">Ready to File</span>
+                <span className={`${cls.badge} ${cls.badgeColor.blue}`}>Ready to File</span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead><tr className="bg-gray-50 border-b border-gray-100">
+                  <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}>
                     <Th>Invoice No</Th><Th>Date</Th><Th>Customer</Th><Th>GSTIN</Th><Th>Type</Th><Th>Taxable Value</Th><Th>CGST</Th><Th>SGST</Th><Th>Total</Th>
                   </tr></thead>
                   <tbody>
                     {gstrData.gstr1.map((r) => (
-                      <tr key={r.invoiceNo} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
+                      <tr key={r.invoiceNo} className={`${cls.tableRow} hover:bg-gray-50`}>
                         <Td><span className="font-mono text-xs">{r.invoiceNo}</span></Td>
                         <Td>{formatDate(r.date)}</Td>
                         <Td>{r.customer}</Td>
                         <Td><span className="font-mono text-xs text-gray-500">{r.gstin || '—'}</span></Td>
-                        <Td><span className={`px-2 py-0.5 text-xs rounded-full font-medium ${r.type === 'B2B' ? 'bg-purple-100 text-purple-700' : 'bg-amber-100 text-amber-700'}`}>{r.type}</span></Td>
+                        <Td><span className={`${cls.badge} ${r.type === 'B2B' ? cls.badgeColor.purple : cls.badgeColor.amber}`}>{r.type}</span></Td>
                         <Td>{formatINR(r.taxableValue)}</Td>
                         <Td className="text-blue-600">{formatINR(r.cgst)}</Td>
                         <Td className="text-blue-600">{formatINR(r.sgst)}</Td>
@@ -185,7 +186,7 @@ export default function Reports() {
                     ))}
                   </tbody>
                   <tfoot>
-                    <tr className="bg-gray-50 font-semibold text-gray-900">
+                    <tr className={`${cls.tableFooter} font-semibold text-gray-900`}>
                       <Td colSpan={5}>Total</Td>
                       <Td>{formatINR(gstrData.gstr1.reduce((s, r) => s + r.taxableValue, 0))}</Td>
                       <Td className="text-blue-600">{formatINR(gstrData.gstr1.reduce((s, r) => s + r.cgst, 0))}</Td>
@@ -201,13 +202,13 @@ export default function Reports() {
 
         {active === 'gstr3b' && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className={cls.cardMd}>
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h4 className="font-semibold text-lg">GSTR-3B Summary</h4>
-                  <p className="text-xs text-gray-500 mt-0.5">Period: {gstrData.summary.period}</p>
+                  <p className={`${cls.mutedText} mt-0.5`}>Period: {gstrData.summary.period}</p>
                 </div>
-                <span className="px-3 py-1.5 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full">Pending Filing</span>
+                <span className={`${cls.badge} ${cls.badgeColor.amber} px-3 py-1.5`}>Pending Filing</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="border border-gray-200 rounded-xl p-4">
@@ -240,7 +241,7 @@ export default function Reports() {
                     ))}
                   </div>
                 </div>
-                <div className="md:col-span-2 border border-amber-200 bg-amber-50 rounded-xl p-4">
+                <div className={`md:col-span-2 ${cls.panel.amber} p-4`}>
                   <h5 className="text-xs font-semibold text-amber-800 uppercase mb-3">5 — Net Tax Liability</h5>
                   <div className="grid grid-cols-3 gap-4">
                     {[
@@ -257,9 +258,9 @@ export default function Reports() {
                 </div>
               </div>
               <div className="mt-5 flex gap-3">
-                <button className="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold">File GSTR-3B</button>
-                <button className="px-5 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-lg text-sm font-medium flex items-center gap-2"><Download className="w-4 h-4" />Download JSON</button>
-                <button className="px-5 py-2.5 border border-gray-200 hover:bg-gray-50 rounded-lg text-sm font-medium flex items-center gap-2"><Printer className="w-4 h-4" />Print Summary</button>
+                <button className={cls.btnPrimary}>File GSTR-3B</button>
+                <button className={`${cls.btnSecondary} flex items-center gap-2`}><Download className="w-4 h-4" />Download JSON</button>
+                <button className={`${cls.btnSecondary} flex items-center gap-2`}><Printer className="w-4 h-4" />Print Summary</button>
               </div>
             </div>
           </>
@@ -270,7 +271,7 @@ export default function Reports() {
             <PLCard label="Total Revenue" value={formatINR(monthlySales.reduce((s, m) => s + m.sales, 0))} color="blue" />
             <PLCard label="Cost of Goods" value={formatINR(monthlySales.reduce((s, m) => s + (m.sales - m.profit), 0))} color="red" />
             <PLCard label="Net Profit" value={formatINR(monthlySales.reduce((s, m) => s + m.profit, 0))} color="green" />
-            <div className="md:col-span-3 bg-white rounded-xl border border-gray-200 p-5">
+            <div className={`${cls.cardMd} col-span-3`}>
               <h4 className="font-semibold mb-4">Profit Trend</h4>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={monthlySales}>
@@ -286,7 +287,7 @@ export default function Reports() {
         )}
 
         {active === 'stock' && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className={cls.cardMd}>
             <h4 className="font-semibold mb-4">Stock Distribution by Category</h4>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -301,7 +302,7 @@ export default function Reports() {
         )}
 
         {active === 'customer' && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className={cls.cardMd}>
             <h4 className="font-semibold mb-4">Top Customers by Purchase Value</h4>
             <div className="space-y-2">
               {invoices.slice(0, 8).map((inv, i) => (
@@ -316,19 +317,19 @@ export default function Reports() {
         )}
 
         {active === 'deadstock' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className={`${cls.card} overflow-hidden`}>
             <div className="p-4 border-b border-gray-100 flex justify-between items-center">
               <div>
                 <h4 className="font-semibold">Dead Stock — No Sales in 90+ Days</h4>
-                <p className="text-xs text-gray-500 mt-0.5">{deadstockItems.length} items · Total Value: <span className="font-semibold text-red-600">{formatINR(deadstockItems.reduce((s, i) => s + i.sellingPrice * i.qty, 0))}</span></p>
+                <p className={`${cls.mutedText} mt-0.5`}>{deadstockItems.length} items · Total Value: <span className="font-semibold text-red-600">{formatINR(deadstockItems.reduce((s, i) => s + i.sellingPrice * i.qty, 0))}</span></p>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Code</Th><Th>Name</Th><Th>Category</Th><Th>Qty</Th><Th>Weight</Th><Th>Value</Th><Th>Days Since Last Sale</Th></tr></thead>
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Code</Th><Th>Name</Th><Th>Category</Th><Th>Qty</Th><Th>Weight</Th><Th>Value</Th><Th>Days Since Last Sale</Th></tr></thead>
                 <tbody>
                   {deadstockItems.map((i) => (
-                    <tr key={i.id} className="border-b border-gray-50 last:border-0">
+                    <tr key={i.id} className={cls.tableRow}>
                       <Td className="font-mono text-xs">{i.itemCode}</Td>
                       <Td>{i.name}</Td>
                       <Td>{i.category}</Td>
@@ -351,9 +352,9 @@ export default function Reports() {
               <PLCard label="Total Paid" value={formatINR(purchaseOrders.reduce((s, p) => s + p.paidAmount, 0))} color="green" />
               <PLCard label="Outstanding" value={formatINR(purchaseOrders.reduce((s, p) => s + p.balance, 0))} color="red" />
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className={`${cls.card} overflow-hidden`}>
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>PO #</Th><Th>Date</Th><Th>Supplier</Th><Th>Items</Th><Th>Total</Th><Th>Paid</Th><Th>Balance</Th><Th>Status</Th></tr></thead>
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>PO #</Th><Th>Date</Th><Th>Supplier</Th><Th>Items</Th><Th>Total</Th><Th>Paid</Th><Th>Balance</Th><Th>Status</Th></tr></thead>
                 <tbody>
                   {purchaseOrders.map((p) => (
                     <tr key={p.id} className="border-b border-gray-50 last:border-0">
@@ -380,9 +381,9 @@ export default function Reports() {
               <PLCard label="Avg Repair Cost" value={formatINR(Math.round(repairs.filter((r) => r.finalCost).reduce((s, r) => s + r.finalCost, 0) / Math.max(1, repairs.filter((r) => r.finalCost).length)))} color="green" />
               <PLCard label="Pending Collections" value={formatINR(repairs.filter((r) => r.status !== 'Delivered').reduce((s, r) => s + (r.estimatedCost - r.advancePaid), 0))} color="red" />
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className={`${cls.card} overflow-hidden`}>
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Job #</Th><Th>Customer</Th><Th>Category</Th><Th>Received</Th><Th>Est. Cost</Th><Th>Final Cost</Th><Th>Status</Th></tr></thead>
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Job #</Th><Th>Customer</Th><Th>Category</Th><Th>Received</Th><Th>Est. Cost</Th><Th>Final Cost</Th><Th>Status</Th></tr></thead>
                 <tbody>
                   {repairs.map((r) => (
                     <tr key={r.id} className="border-b border-gray-50 last:border-0">
@@ -402,16 +403,16 @@ export default function Reports() {
         )}
 
         {active === 'outstanding' && (
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className={`${cls.card} overflow-hidden`}>
             <div className="p-4 border-b border-gray-100">
               <h4 className="font-semibold">Customer Outstanding</h4>
-              <p className="text-xs text-gray-500 mt-0.5">{outstandingCustomers.length} customers with pending balances</p>
+              <p className={`${cls.mutedText} mt-0.5`}>{outstandingCustomers.length} customers with pending balances</p>
             </div>
             <table className="w-full text-sm">
-              <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Customer</Th><Th>Total Purchases</Th><Th>Total Paid</Th><Th>Outstanding</Th></tr></thead>
+              <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Customer</Th><Th>Total Purchases</Th><Th>Total Paid</Th><Th>Outstanding</Th></tr></thead>
               <tbody>
                 {outstandingCustomers.map((c) => (
-                  <tr key={c.id} className="border-b border-gray-50 last:border-0">
+                  <tr key={c.id} className={cls.tableRow}>
                     <Td className="font-medium">{c.name}</Td>
                     <Td>{formatINR(c.totalPurchases)}</Td>
                     <Td className="text-emerald-600">{formatINR(c.paid)}</Td>
@@ -420,7 +421,7 @@ export default function Reports() {
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-gray-50 font-semibold"><Td colSpan="3">Total Outstanding</Td><Td className="text-red-600">{formatINR(outstandingCustomers.reduce((s, c) => s + c.outstanding, 0))}</Td></tr>
+                <tr className={`${cls.tableFooter} font-semibold`}><Td colSpan="3">Total Outstanding</Td><Td className="text-red-600">{formatINR(outstandingCustomers.reduce((s, c) => s + c.outstanding, 0))}</Td></tr>
               </tfoot>
             </table>
           </div>
@@ -428,26 +429,26 @@ export default function Reports() {
 
         {active === 'supplier_ledger' && (
           <>
-            <div className="bg-white rounded-xl border border-gray-200 p-4">
-              <label className="text-xs font-semibold text-gray-600 uppercase block mb-2">Select Supplier</label>
-              <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm">
+            <div className={cls.cardMd}>
+              <label className={`${cls.sectionLabel} block mb-2`}>Select Supplier</label>
+              <select value={supplierId} onChange={(e) => setSupplierId(e.target.value)} className={cls.input}>
                 {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
               </select>
             </div>
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className={`${cls.card} overflow-hidden`}>
               <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                 <h4 className="font-semibold">Ledger — {suppliers.find((s) => s.id === Number(supplierId))?.name}</h4>
                 <div className="text-sm">Balance: <span className="font-bold text-red-600">{formatINR(supplierPOs.reduce((s, p) => s + p.balance, 0))}</span></div>
               </div>
               <table className="w-full text-sm">
-                <thead><tr className="bg-gray-50 border-b border-gray-100"><Th>Date</Th><Th>PO #</Th><Th>Debit (PO Total)</Th><Th>Credit (Paid)</Th><Th>Balance</Th><Th>Status</Th></tr></thead>
+                <thead><tr className={`${cls.tableHeader} border-b border-gray-100`}><Th>Date</Th><Th>PO #</Th><Th>Debit (PO Total)</Th><Th>Credit (Paid)</Th><Th>Balance</Th><Th>Status</Th></tr></thead>
                 <tbody>
                   {(() => {
                     let running = 0;
                     return supplierPOs.map((p) => {
                       running += p.total - p.paidAmount;
                       return (
-                        <tr key={p.id} className="border-b border-gray-50 last:border-0">
+                        <tr key={p.id} className={cls.tableRow}>
                           <Td>{formatDate(p.date)}</Td>
                           <Td className="font-mono text-xs">{p.id}</Td>
                           <Td className="text-red-600">{formatINR(p.total)}</Td>
@@ -466,7 +467,7 @@ export default function Reports() {
         )}
 
         {active === 'staff' && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className={cls.cardMd}>
             <h4 className="font-semibold mb-4">Staff Performance</h4>
             <div className="space-y-3">
               {staff.slice(0, 6).map((s, i) => {
@@ -476,7 +477,7 @@ export default function Reports() {
                     <div className="w-9 h-9 rounded-full text-white font-semibold flex items-center justify-center" style={{ background: s.image }}>{s.name[0]}</div>
                     <div className="flex-1">
                       <div className="text-sm font-medium">{s.name}</div>
-                      <div className="text-xs text-gray-500">{s.role}</div>
+                      <div className={cls.mutedText}>{s.role}</div>
                     </div>
                     <div className="w-40 h-1.5 bg-gray-100 rounded-full"><div className="h-full bg-amber-500 rounded-full" style={{ width: `${Math.min(100, (sales/2100000)*100)}%` }}></div></div>
                     <div className="w-32 text-right font-semibold text-gray-900">{formatINR(sales)}</div>
@@ -491,8 +492,8 @@ export default function Reports() {
   );
 }
 
-const Th = ({ children }) => <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">{children}</th>;
-const Td = ({ children, className = '', colSpan }) => <td className={`px-4 py-3 text-gray-700 ${className}`} colSpan={colSpan}>{children}</td>;
+const Th = ({ children }) => <th className={`${cls.tableCell} ${cls.tableHeader} text-left`}>{children}</th>;
+const Td = ({ children, className = '', colSpan }) => <td className={`${cls.tableCell} text-gray-700 ${className}`} colSpan={colSpan}>{children}</td>;
 
 function PLCard({ label, value, color }) {
   const colors = { blue: 'from-blue-500 to-blue-600', red: 'from-red-500 to-red-600', green: 'from-emerald-500 to-emerald-600' };

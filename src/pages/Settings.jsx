@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Store, Coins, Percent, UserCog, Shield, Bell, Database, Save, ClipboardList, CheckCircle, XCircle } from 'lucide-react';
 import { shopSettings, auditLog } from '../data/mockData';
+import * as cls from '../styles/classes';
 
 const SECTIONS = [
   { key: 'shop', label: 'Shop Details', icon: Store },
@@ -25,8 +26,8 @@ export default function Settings() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
-      <aside className="bg-white rounded-xl border border-gray-200 p-3 h-fit">
-        <div className="text-xs font-semibold text-gray-500 uppercase px-3 py-2">Settings</div>
+      <aside className={`${cls.card} p-3 h-fit`}>
+        <div className={`${cls.sectionLabel} px-3 py-2`}>Settings</div>
         <nav className="space-y-1">
           {SECTIONS.map((s) => {
             const Icon = s.icon;
@@ -40,8 +41,8 @@ export default function Settings() {
       </aside>
 
       <div className="lg:col-span-3">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          {saved && <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-sm">Settings saved successfully</div>}
+        <div className={cls.cardLg}>
+          {saved && <div className={`mb-4 ${cls.panel.emerald} text-emerald-700 text-sm`}>Settings saved successfully</div>}
 
           {section === 'shop' && (
             <Section title="Shop Details" desc="Business identity and contact info">
@@ -65,7 +66,7 @@ export default function Settings() {
                 <F label="18K Gold Rate (₹/g)" type="number" value={settings.goldRates['18K']} onChange={(v) => setSettings({ ...settings, goldRates: { ...settings.goldRates, '18K': Number(v) } })} />
                 <F label="Silver Rate (₹/g)" type="number" value={settings.silverRate} onChange={(v) => setSettings({ ...settings, silverRate: Number(v) })} />
               </div>
-              <div className="mt-4 p-3 bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg">
+              <div className={`mt-4 ${cls.panel.amber} text-amber-800 text-xs`}>
                 Rates are used across billing and invoices. Update daily for accurate pricing.
               </div>
             </Section>
@@ -110,7 +111,7 @@ export default function Settings() {
             <Section title="Roles & Permissions" desc="Define what each role can access">
               <div className="space-y-3">
                 {['Owner', 'Manager', 'Sales Executive', 'Cashier', 'Accountant'].map((r) => (
-                  <div key={r} className="p-4 border border-gray-200 rounded-lg">
+                  <div key={r} className={cls.cardSm}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="font-medium">{r}</div>
                       <button className="text-xs text-amber-600 font-medium">Edit</button>
@@ -147,7 +148,7 @@ export default function Settings() {
                   <div className="font-semibold text-gray-900">Last Backup</div>
                   <div className="text-2xl font-bold text-emerald-600 mt-2">Today 3:00 AM</div>
                   <p className="text-xs text-gray-500 mt-1">Auto-backup runs daily</p>
-                  <button className="mt-3 px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium">Backup Now</button>
+                  <button className={`mt-3 ${cls.btnPrimary} text-sm`}>Backup Now</button>
                 </div>
                 <div className="p-5 border border-gray-200 rounded-lg">
                   <div className="font-semibold text-gray-900">Export Data</div>
@@ -167,8 +168,8 @@ export default function Settings() {
           )}
 
           <div className="mt-6 pt-6 border-t border-gray-100 flex justify-end gap-2">
-            <button className="px-4 py-2 border border-gray-200 rounded-lg text-sm">Cancel</button>
-            <button onClick={save} className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-medium flex items-center gap-2"><Save className="w-4 h-4" />Save Changes</button>
+            <button className={cls.btnSecondary}>Cancel</button>
+                  <button onClick={save} className={`${cls.btnPrimary} flex items-center gap-2`}><Save className="w-4 h-4" />Save Changes</button>
           </div>
         </div>
       </div>
@@ -194,39 +195,39 @@ function AuditLogSection() {
       <h3 className="text-lg font-semibold text-gray-900">Audit Log</h3>
       <p className="text-xs text-gray-500 mt-0.5 mb-4">Complete history of all actions performed in the CRM</p>
       <div className="flex flex-wrap gap-3 mb-4">
-        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search actions, users..." className="px-3 py-2 border border-gray-200 rounded-lg text-sm flex-1 min-w-[200px] outline-none focus:border-amber-400" />
-        <select value={moduleFilter} onChange={(e) => setModuleFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+        <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search actions, users..." className={`${cls.inputSm} flex-1 min-w-[200px]`} />
+        <select value={moduleFilter} onChange={(e) => setModuleFilter(e.target.value)} className={cls.inputSm}>
           {modules.map((m) => <option key={m}>{m}</option>)}
         </select>
-        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="px-3 py-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-amber-400">
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={cls.inputSm}>
           <option>All</option><option>Success</option><option>Failed</option>
         </select>
       </div>
       <div className="border border-gray-200 rounded-xl overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase whitespace-nowrap">Timestamp</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">User</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Action</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase hidden md:table-cell">Module</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase hidden lg:table-cell">Details</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase hidden md:table-cell">IP</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-gray-600 uppercase">Status</th>
+            <tr className={`${cls.tableHeader} border-b border-gray-100`}>
+              <th className={`${cls.tableCell} whitespace-nowrap`}>Timestamp</th>
+              <th className={cls.tableCell}>User</th>
+              <th className={cls.tableCell}>Action</th>
+              <th className={`${cls.tableCell} hidden md:table-cell`}>Module</th>
+              <th className={`${cls.tableCell} hidden lg:table-cell`}>Details</th>
+              <th className={`${cls.tableCell} hidden md:table-cell`}>IP</th>
+              <th className={cls.tableCell}>Status</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((log) => (
-              <tr key={log.id} className={`border-b border-gray-50 last:border-0 ${log.status === 'Failed' ? 'bg-red-50' : 'hover:bg-gray-50'}`}>
-                <td className="px-4 py-3 text-xs font-mono text-gray-500 whitespace-nowrap">{log.timestamp}</td>
-                <td className="px-4 py-3 text-xs text-gray-700">{log.user}</td>
-                <td className="px-4 py-3 text-xs font-medium text-gray-900">{log.action}</td>
-                <td className="px-4 py-3 hidden md:table-cell">
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded">{log.module}</span>
+              <tr key={log.id} className={`${cls.tableRow} ${log.status === 'Failed' ? 'bg-red-50' : 'hover:bg-gray-50'}`}>
+                <td className={`${cls.tableCell} text-xs font-mono text-gray-500 whitespace-nowrap`}>{log.timestamp}</td>
+                <td className={`${cls.tableCell} text-xs text-gray-700`}>{log.user}</td>
+                <td className={`${cls.tableCell} text-xs font-medium text-gray-900`}>{log.action}</td>
+                <td className={`${cls.tableCell} hidden md:table-cell`}>
+                  <span className={`${cls.badge} ${cls.badgeColor.gray}`}>{log.module}</span>
                 </td>
-                <td className="px-4 py-3 text-xs text-gray-500 hidden lg:table-cell max-w-xs truncate">{log.details}</td>
-                <td className="px-4 py-3 text-xs font-mono text-gray-400 hidden md:table-cell">{log.ip}</td>
-                <td className="px-4 py-3">
+                <td className={`${cls.tableCell} text-xs text-gray-500 hidden lg:table-cell max-w-xs truncate`}>{log.details}</td>
+                <td className={`${cls.tableCell} text-xs font-mono text-gray-400 hidden md:table-cell`}>{log.ip}</td>
+                <td className={cls.tableCell}>
                   {log.status === 'Success'
                     ? <span className="flex items-center gap-1 text-emerald-600 text-xs font-medium"><CheckCircle className="w-3.5 h-3.5" />Success</span>
                     : <span className="flex items-center gap-1 text-red-600 text-xs font-medium"><XCircle className="w-3.5 h-3.5" />Failed</span>
@@ -255,8 +256,8 @@ function Section({ title, desc, children }) {
 function F({ label, value, onChange, type = 'text' }) {
   return (
     <div>
-      <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:border-amber-400 focus:ring-2 focus:ring-amber-100 outline-none" />
+      <label className={cls.fieldLabel}>{label}</label>
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className={cls.input} />
     </div>
   );
 }
@@ -265,8 +266,8 @@ function ToggleRow({ label, defaultChecked }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
       <span className="text-sm text-gray-700">{label}</span>
-      <button onClick={() => setOn(!on)} className={`relative w-10 h-5 rounded-full transition-colors ${on ? 'bg-amber-500' : 'bg-gray-300'}`}>
-        <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-transform ${on ? 'translate-x-5' : 'translate-x-0.5'}`}></span>
+      <button onClick={() => setOn(!on)} className={cls.toggleTrack(on)}>
+        <span className={cls.toggleThumb(on)}></span>
       </button>
     </div>
   );
